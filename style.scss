@@ -1,0 +1,162 @@
+// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+$fg-color: #{"@theme_fg_color"};
+$bg-color: #{"@theme_bg_color"};
+
+window.Bar {
+  background: transparent;
+  color: $fg-color;
+  font-weight: bold;
+
+  > centerbox {
+    background: $bg-color;
+    border-radius: 10px;
+    margin: 8px;
+  }
+
+  button {
+    border-radius: 8px;
+    margin: 2px;
+  }
+}
+
+/* existing styles - simplified for GTK */
+.notification_item_box {
+  padding: 12px 14px;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.notification_item_title {
+  color: #ff6b6b;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.notification_item_content {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.notification_content_box {
+  padding: 6px 0;
+}
+
+.notification_image {
+  border-radius: 10px;
+  min-width: 56px;
+  min-height: 56px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.TimeBox {
+  font-size: 60px
+}
+
+.HourBox {
+
+}
+
+.MinuteBox {
+
+}
+
+.TimeSeperator {
+  
+}
+
+/* Calendar Styling */
+calendar {
+  background-color: rgba(0, 0, 0, 0.95);
+  // border-radius: 10px;
+  padding: 12px;
+  color: #ffffff;
+  border: none;
+
+  /* Day numbers */
+  label {
+    color: #ffffff;
+    font-size: 14px;
+    padding: 4px;
+  }
+  
+  /* Day names (Mon, Tue, etc.) */
+  label.day-name {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: bold;
+  }
+  
+  /* Today's date */
+  label.today {
+    background-color: #ff6b6b;
+    border-radius: 50%;
+    color: #ffffff;
+  }
+  
+  /* Selected date */
+  label:selected {
+    background-color: rgba(255, 107, 107, 0.5);
+    border-radius: 50%;
+  }
+  
+  /* Hover effect */
+  label:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+  }
+  
+  /* Days from other months */
+  label.other-month {
+    color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Style the popover that contains the calendar */
+popover {
+  background-color: transparent;
+  border: none;
+  padding: 8px;
+  
+  > contents {
+    background-color: rgba(0, 0, 0, 0.95);
+    border-radius: 12px;
+  }
+}
+
+.calendar-popover-box {
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.95);
+  border-radius: 12px;
+}
+
+.calendar-header {
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 12px;
+}
+
+.calendar-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.calendar-time {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff6b6b;
+  margin-top: 4px;
+}
+
+.calendar-footer {
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 12px;
+}
+
+.calendar-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
