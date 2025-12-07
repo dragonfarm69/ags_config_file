@@ -19,3 +19,13 @@ declare module "*.css" {
   const content: string
   export default content
 }
+
+declare module "gi://AstalNetwork" {
+    const AstalNetwork: any;
+    export default AstalNetwork;
+}
+
+declare module "gi://AstalNetwork?version=1.0" {
+    const AstalNetwork: any;
+    export default AstalNetwork;
+}
