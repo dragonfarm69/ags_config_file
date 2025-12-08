@@ -5,11 +5,17 @@ import { readFile } from "ags/file";
 import { createPoll } from "ags/time";
 import { createComputed } from "gnim";
 import Gio from "gi://Gio?version=2.0";
+import AstalWp from "gi://AstalWp"
+import { createBinding } from "gnim";
+import { exec, execAsync } from "ags/process";
 
-const img = `file:///${GLib.get_home_dir()}/.config/ags/assets/test.png`
+const img = `file:///${GLib.get_home_dir()}/.config/ags/assets/Elizabeth.png`
 
 const network = Network.get_default();
 const wifi = network.wifi;
+const { defaultSpeaker: speaker, defaultMicrophone: microphone } = AstalWp.get_default()!
+console.log(microphone.volume)
+console.log(speaker.volume)
 
 function formatBytes(bytes: number) {
     if (bytes < 1024) return `${bytes.toFixed(0)} B/s`;
@@ -119,6 +125,29 @@ export const ProfileWidget = () => {
     return `${usedGb}GB / ${totalGb}GB`;
   });
 
+  const volumeLabel = createComputed((track) => {
+    const volume = track(createBinding(speaker, "volume"));
+    return `${Math.round(volume * 100)}%`;
+  });
+
+  const microphoneLabel = createComputed((track) => {
+    const volume = track(createBinding(microphone, "volume"));
+    return `${Math.round(volume * 100)}%`;
+  });
+
+  const username = GLib.get_user_name();
+
+  const distroName = (() => {
+    try {
+      const osRelease = readFile('/etc/os-release');
+      const match = osRelease.match(/^PRETTY_NAME="(.+)"$/m);
+      return match ? match[1] : 'Linux';
+    } catch (e) {
+      console.error(`Failed to get distro name: ${e}`);
+      return 'Linux';
+    }
+  })();
+
   return (
     <>
         <menubutton $type="end" hexpand halign={Gtk.Align.END}>   
@@ -133,9 +162,10 @@ export const ProfileWidget = () => {
                     <label class="profile_image" css={`background-image: url('${img}');`} />
                   </box>
 
-                  <box orientation={Gtk.Orientation.VERTICAL}>
-                    <label label={"SOMETHING"}/>
-                    <label label={network.wifi.ssid}/>
+                  <box orientation={Gtk.Orientation.VERTICAL} spacing={10}>
+                    <label label={"󰣇  " + distroName} halign={Gtk.Align.START}/>
+                    <label label={"  " + username} halign={Gtk.Align.START}/>
+                    <label label={"   " + network.wifi.ssid} halign={Gtk.Align.START}/>
                   </box>
                 </box>
 
@@ -168,13 +198,47 @@ export const ProfileWidget = () => {
                   <box orientation={Gtk.Orientation.VERTICAL}>
                     <label label={downloadSpeedLabel} halign={Gtk.Align.START} ></label>
                     <label label={uploadSpeedLabel} halign={Gtk.Align.START} ></label>
+                    <box>
+                      <label label={" "} halign={Gtk.Align.START}/>
+                      <slider
+                        min={0}
+                        max={1.3}
+                        widthRequest={260}
+                        onChangeValue={({ value }) => {speaker.set_volume(value);}}
+                        value={createBinding(speaker, "volume")}
+                      />
+                      <label label={volumeLabel} halign={Gtk.Align.START} ></label>
+                    </box>  
+                    <box>
+                      <label label={""} halign={Gtk.Align.START} css={`padding-left: 10px; margin-right: 7px`}/>
+                      <slider
+                        min={0}
+                        max={1.3}
+                        widthRequest={260}
+                        onChangeValue={({ value }) => {microphone.set_volume(value);}}
+                        value={createBinding(microphone, "volume")}
+                      />
+                      <label label={microphoneLabel} halign={Gtk.Align.START} ></label>
+                    </box>
                   </box>
-
-                  
                 </box>
 
                 <box class="third-layer"> 
-                  <label label={"THIRD LAYER"}></label>
+                  <button onClicked={() => {
+                    execAsync(["bash", "-c", "setsid piper >/dev/null 2>&1 < /dev/null &"])
+                      .catch(err => console.error("Error executing 'piper':", err));
+                    }}>
+                    <label label={"Mouse"}/>
+                  </button>
+                  <button onClicked={() => {
+                    execAsync(["bash", "-c", "setsid pavucontrol >/dev/null 2>&1 < /dev/null &"])
+                      .catch(err => console.error("Error executing 'piper':", err));
+                    }}>
+                    <label label={"Volume"}/>
+                  </button>
+
+                  
+                  
                 </box>
 
                 <box class="fourth-layer"> 

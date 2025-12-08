@@ -29,3 +29,8 @@ declare module "gi://AstalNetwork?version=1.0" {
     const AstalNetwork: any;
     export default AstalNetwork;
 }
+
+declare module "gi://AstalWp" {
+    const AstalWp: any;
+    export default AstalWp;
+}
