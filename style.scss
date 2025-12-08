@@ -127,7 +127,7 @@ popover {
 
 .calendar-popover-box {
   padding: 12px;
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: rgba(0, 0, 0, 1.0);
   border-radius: 12px;
 }
 
@@ -166,7 +166,7 @@ popover {
   padding: 10px;
   font-size: 25px;
   color: rgb(255, 0, 0);
-  background-color: rgba($color: #000000, $alpha: 0.7)
+  background-color: rgba($color: #000000, $alpha: 1.0)
 }
 
 .profile_image {
@@ -176,4 +176,13 @@ popover {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.third-layer {
+  color: blue;
+  font-size: 60px;
+}
+
+.third-layer button {
+  background-color: #ff6b6b;
 }

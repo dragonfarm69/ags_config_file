@@ -223,22 +223,25 @@ export const ProfileWidget = () => {
                   </box>
                 </box>
 
-                <box class="third-layer"> 
+                <box class="third-layer" spacing={20} halign={Gtk.Align.CENTER}> 
                   <button onClicked={() => {
                     execAsync(["bash", "-c", "setsid piper >/dev/null 2>&1 < /dev/null &"])
                       .catch(err => console.error("Error executing 'piper':", err));
                     }}>
-                    <label label={"Mouse"}/>
+                    <label label={"󰍽"}/>
                   </button>
                   <button onClicked={() => {
                     execAsync(["bash", "-c", "setsid pavucontrol >/dev/null 2>&1 < /dev/null &"])
                       .catch(err => console.error("Error executing 'piper':", err));
                     }}>
-                    <label label={"Volume"}/>
+                    <label label={" "}/>
                   </button>
-
-                  
-                  
+                  <button onClicked={() => {
+                    execAsync(["bash", "-c", "setsid blueberry >/dev/null 2>&1 < /dev/null &"])
+                      .catch(err => console.error("Error executing 'piper':", err));
+                    }}>
+                    <label label={""}/>
+                  </button>
                 </box>
 
                 <box class="fourth-layer"> 
