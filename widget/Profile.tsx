@@ -244,8 +244,16 @@ export const ProfileWidget = () => {
                   </button>
                 </box>
 
-                <box class="fourth-layer"> 
-                  <label label={"fourth LAYER"}></label>
+                <box class="fourth-layer" spacing={20} halign={Gtk.Align.CENTER}> 
+                  <button onClicked={() => execAsync('loginctl terminate-session self').catch(console.error)}>
+                    <label label={"󰍃"}/>
+                  </button>
+                  <button onClicked={() => execAsync('systemctl suspend').catch(console.error)}>
+                    <label label={"󰤄"}/>
+                  </button>
+                  <button onClicked={() => execAsync('systemctl poweroff').catch(console.error)}>
+                    <label label={"⏻"}/>
+                  </button>
                 </box>
               
               </box>

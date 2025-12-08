@@ -1,7 +1,27 @@
-// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+// --- Variables ---
 $fg-color: #{"@theme_fg_color"};
 $bg-color: #{"@theme_bg_color"};
 
+// Colors
+$red: #ff6b6b;
+$blue: #4a90e2;
+$text-primary: #ffffff;
+$text-secondary: rgba(255, 255, 255, 0.6);
+$text-tertiary: rgba(255, 255, 255, 0.5);
+$bg-dark-alpha: rgba(0, 0, 0, 0.9);
+$bg-dark: #000000;
+$border-color: rgba(255, 255, 255, 0.1);
+
+// Sizing & Radius
+$border-radius-sm: 8px;
+$border-radius-md: 12px;
+$border-radius-lg: 30px;
+$border-radius-circle: 50%;
+$padding-sm: 8px;
+$padding-md: 12px;
+$padding-lg: 14px;
+
+// --- Base Styles ---
 window.Bar {
   background: transparent;
   color: $fg-color;
@@ -9,32 +29,45 @@ window.Bar {
 
   > centerbox {
     background: $bg-color;
-    border-radius: 10px;
-    margin: 8px;
+    border-radius: $border-radius-md;
+    margin: $padding-sm;
   }
 
   button {
-    border-radius: 8px;
+    border-radius: $border-radius-sm;
     margin: 2px;
   }
 }
 
-/* existing styles - simplified for GTK */
+popover {
+  background-color: transparent;
+  border: none;
+  padding: $padding-sm;
+  
+  > contents {
+    background-color: transparent;
+    border-radius: $border-radius-md;
+  }
+}
+
+// --- Component Styles ---
+
+// Notifications
 .notification_item_box {
-  padding: 12px 14px;
-  background-color: rgba(0, 0, 0, 0.9);
-  border-radius: 10px;
-  margin-bottom: 8px;
+  padding: $padding-md $padding-lg;
+  background-color: $bg-dark-alpha;
+  border-radius: $border-radius-md;
+  margin-bottom: $padding-sm;
 }
 
 .notification_item_title {
-  color: #ff6b6b;
+  color: $red;
   font-size: 18px;
   font-weight: 700;
 }
 
 .notification_item_content {
-  color: #ffffff;
+  color: $text-primary;
   font-size: 14px;
 }
 
@@ -42,147 +75,105 @@ window.Bar {
   padding: 6px 0;
 }
 
-.notification_image {
-  border-radius: 10px;
-  min-width: 56px;
-  min-height: 56px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
+// Clock & Calendar
 .TimeBox {
-  font-size: 60px
-}
-
-.HourBox {
-
-}
-
-.MinuteBox {
-
-}
-
-.TimeSeperator {
-  
-}
-
-/* Calendar Styling */
-calendar {
-  background-color: rgba(0, 0, 0, 0.95);
-  // border-radius: 10px;
-  padding: 12px;
-  color: #ffffff;
-  border: none;
-
-  /* Day numbers */
-  label {
-    color: #ffffff;
-    font-size: 14px;
-    padding: 4px;
-  }
-  
-  /* Day names (Mon, Tue, etc.) */
-  label.day-name {
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: bold;
-  }
-  
-  /* Today's date */
-  label.today {
-    background-color: #ff6b6b;
-    border-radius: 50%;
-    color: #ffffff;
-  }
-  
-  /* Selected date */
-  label:selected {
-    background-color: rgba(255, 107, 107, 0.5);
-    border-radius: 50%;
-  }
-  
-  /* Hover effect */
-  label:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-  }
-  
-  /* Days from other months */
-  label.other-month {
-    color: rgba(255, 255, 255, 0.3);
-  }
-}
-
-/* Style the popover that contains the calendar */
-popover {
-  background-color: transparent;
-  border: none;
-  padding: 8px;
-  
-  > contents {
-    background-color: transparent;
-    border-radius: 12px;
-  }
+  font-size: 60px;
 }
 
 .calendar-popover-box {
-  padding: 12px;
-  background-color: rgba(0, 0, 0, 1.0);
-  border-radius: 12px;
+  padding: $padding-md;
+  background-color: $bg-dark;
+  border-radius: $border-radius-md;
 }
 
 .calendar-header {
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 12px;
+  padding-bottom: $padding-md;
+  border-bottom: 1px solid $border-color;
+  margin-bottom: $padding-md;
 }
 
 .calendar-title {
   font-size: 18px;
   font-weight: bold;
-  color: #ffffff;
+  color: $text-primary;
 }
 
 .calendar-time {
   font-size: 24px;
   font-weight: bold;
-  color: #ff6b6b;
+  color: $red;
   margin-top: 4px;
 }
 
-.calendar-footer {
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: 12px;
+calendar {
+  background-color: transparent;
+  color: $text-primary;
+  border: none;
+
+  label {
+    color: $text-primary;
+    font-size: 14px;
+    padding: 4px;
+  }
+  
+  label.day-name {
+    color: $text-secondary;
+    font-weight: bold;
+  }
+  
+  label.today {
+    background-color: $red;
+    border-radius: $border-radius-circle;
+    color: $text-primary;
+  }
+  
+  label:selected {
+    background-color: rgba($red, 0.5);
+    border-radius: $border-radius-circle;
+  }
+  
+  label:hover {
+    background-color: rgba($text-primary, 0.1);
+    border-radius: $border-radius-circle;
+  }
+  
+  label.other-month {
+    color: rgba($text-primary, 0.3);
+  }
 }
 
-.calendar-hint {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
+// Profile Popover
 .profile-popover-box {
-  border-radius: 30px;
-  padding: 10px;
+  border-radius: $border-radius-lg;
+  padding: $padding-md;
   font-size: 25px;
-  color: rgb(255, 0, 0);
-  background-color: rgba($color: #000000, $alpha: 1.0)
+  color: $text-primary;
+  background-color: $bg-dark;
 }
 
-.profile_image {
-  border-radius: 40px;
-  min-width: 160px;
-  min-height: 160px;
+.profile_image, .notification_image {
+  min-width: 56px;
+  min-height: 56px;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  border-radius: $border-radius-md;
 }
 
-.third-layer {
-  color: blue;
-  font-size: 60px;
+.profile_image {
+  min-width: 160px;
+  min-height: 160px;
+  border-radius: 40px;
 }
 
-.third-layer button {
-  background-color: #ff6b6b;
+// Power & Control Buttons
+.third-layer, .fourth-layer {
+  button {
+    background-color: $red;
+    label {
+      color: $blue;
+      font-size: 60px;
+    }
+  }
 }
+
