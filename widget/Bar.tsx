@@ -6,6 +6,7 @@ import GLib from "gi://GLib"
 import { ClockWidget } from "./Clock"
 import { ProfileWidget } from "./Profile"
 import { AnimationWidget } from "./Animation"
+import { WallpaperList } from "./wallpaper_viewer"
 
 const img = `file:///${GLib.get_home_dir()}/.config/ags/assets/test.png`
 
@@ -150,6 +151,20 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
           </For>
         </box>
       </window>
+
+
+      {/* <window
+        visible
+        name="image_viewer"
+        class="image-viewer"
+        gdkmonitor={gdkmonitor}
+        exclusivity={Astal.Exclusivity.IGNORE}
+        application={app}
+      >
+        <box orientation={Gtk.Orientation.HORIZONTAL}>
+            {WallpaperList("/home/dragonfarm/Pictures/Wallpapers")}
+        </box>
+      </window> */}
     </> 
   )
 }

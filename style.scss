@@ -222,3 +222,22 @@ window.profile-window {
 .upload-label {
   color: rgb(0, 255, 0);
 }
+
+.image-viewer-main {
+  background-color: $bg-primary;
+}
+
+.image-viewer-button {
+  background-color: $bg-alt;
+  color: $text-color-primary;
+
+  &:hover {
+    background-color: $bg-primary;
+  }
+}
+
+.image-viewer-label {
+  color: $text-color-primary;
+  background-color: $bg-alt;
+  border-radius: 30px;
+}
