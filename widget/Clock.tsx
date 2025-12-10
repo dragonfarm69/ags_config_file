@@ -15,8 +15,8 @@ export const ClockWidget = () => {
 
   return (
     <>
-        <menubutton $type="end" hexpand halign={Gtk.Align.END}>
-        <box class="TimeBox">
+        <menubutton $type="end" hexpand halign={Gtk.Align.END} class={"time-menu-button"}>
+        <box class={"TimeBox"}>
             <box class="HourBox">
                 <label label={hours} />
             </box>

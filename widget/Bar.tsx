@@ -5,6 +5,7 @@ import { createState, For } from "gnim"
 import GLib from "gi://GLib"
 import { ClockWidget } from "./Clock"
 import { ProfileWidget } from "./Profile"
+import { AnimationWidget } from "./Animation"
 
 const img = `file:///${GLib.get_home_dir()}/.config/ags/assets/test.png`
 
@@ -18,6 +19,7 @@ type Notification = {
 export default function Bar(gdkmonitor: Gdk.Monitor) {
   const time = createPoll("", 1000, "date")
   const [notifications, setNotifications] = createState<Notification[]>([])
+  const [showProfile, setShowProfile] = createState(false)
   const { TOP, BOTTOM, LEFT, RIGHT } = Astal.WindowAnchor
 
   let notificationId = 0
@@ -98,16 +100,10 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         class="Bar"
         gdkmonitor={gdkmonitor}
         exclusivity={Astal.Exclusivity.NORMAL}
-        anchor={TOP | LEFT | RIGHT}
+        anchor={TOP | LEFT}
         application={app}
       >
-        <centerbox cssName="centerbox">
-          <box $type="center" />
-          <box $type="end" hexpand halign={Gtk.Align.END}>
-            <ProfileWidget></ProfileWidget>
-            <label label="Top Right" />
-          </box>
-        </centerbox>
+        <ClockWidget></ClockWidget>
       </window>
 
       {/* Bottom Bar */}
@@ -122,20 +118,21 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       >
         <centerbox cssName="centerbox">
           <box $type="start" hexpand halign={Gtk.Align.START}>
-            <label label="Bottom Left" />
-            <button
+            {/* <button
               $type="start"
               onClicked={addNotification}
               hexpand
               halign={Gtk.Align.START}
             >
               <label label="Show Notification" />
-            </button>
+            </button> */}
+            <AnimationWidget/>
           </box>
-          <box $type="center" />
-          <ClockWidget></ClockWidget>
         </centerbox>
       </window>
+
+      {/* Profile Window */}
+      <ProfileWidget/>
 
       {/* Notifications Window - Only visible when there are notifications */}
       <window
@@ -153,6 +150,6 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
           </For>
         </box>
       </window>
-    </>
+    </> 
   )
 }

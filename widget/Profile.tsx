@@ -8,14 +8,14 @@ import Gio from "gi://Gio?version=2.0";
 import AstalWp from "gi://AstalWp"
 import { createBinding } from "gnim";
 import { exec, execAsync } from "ags/process";
+import { Astal } from "ags/gtk4";
+import app from "ags/gtk4/app";
 
 const img = `file:///${GLib.get_home_dir()}/.config/ags/assets/Elizabeth.png`
 
 const network = Network.get_default();
 const wifi = network.wifi;
 const { defaultSpeaker: speaker, defaultMicrophone: microphone } = AstalWp.get_default()!
-console.log(microphone.volume)
-console.log(speaker.volume)
 
 function formatBytes(bytes: number) {
     if (bytes < 1024) return `${bytes.toFixed(0)} B/s`;
@@ -99,11 +99,11 @@ export const ProfileWidget = () => {
 
   const downloadSpeedLabel = createComputed((track) => {
     const download_speed = formatBytes(track(downloadSpeed));
-    return `Download Speed: ${download_speed}`;
+    return `󰇚  ${download_speed}`;
   });
   const uploadSpeedLabel = createComputed((track) => {
     const upload_speed = formatBytes(track(uploadSpeed))
-    return `Upload Speed: ${upload_speed}`;
+    return `󰕒  ${upload_speed}`;
   });
 
   const usedRam = createComputed((track) => track(memInfo).used);
@@ -148,117 +148,187 @@ export const ProfileWidget = () => {
     }
   })();
 
+  const NetGraph = ({ width = 200, height = 60, maxSamples = 50 }) => {
+    let downHistory = Array(maxSamples).fill(0);
+    let upHistory = Array(maxSamples).fill(0);
+
+    // Push new values when computed changes
+    const updateHistory = () => {
+        const down = downloadSpeed.get();
+        const up = uploadSpeed.get();
+        downHistory.push(down);
+        upHistory.push(up);
+
+        if (downHistory.length > maxSamples) downHistory.shift();
+        if (upHistory.length > maxSamples) upHistory.shift();
+
+        area.queue_draw();
+        return true;
+    };
+
+    // Update every second
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1000, updateHistory);
+
+    const area = new Gtk.DrawingArea({
+        width_request: width,
+        height_request: height,
+    });
+
+    area.set_draw_func((_, cr, w, h) => {
+        // background
+        cr.setSourceRGBA(0.1, 0.1, 0.1, 0.5);
+        cr.rectangle(0, 0, w, h);
+        cr.fill();
+
+        const maxValue = Math.max(...downHistory, ...upHistory, 1);
+
+        // Helper to scale values
+        const scale = (v: number) => h - (v / maxValue) * (h - 5);
+
+        // Draw download line
+        cr.setSourceRGBA(1, 0, 0, 1);  
+        cr.setLineWidth(2);
+
+        downHistory.forEach((v, i) => {
+            const x = (i / (maxSamples - 1)) * w;
+            const y = scale(v);
+            if (i === 0) cr.moveTo(x, y);
+            else cr.lineTo(x, y);
+        });
+        cr.stroke();
+
+        // Draw upload line
+        cr.setSourceRGBA(0, 1, 0, 1);
+        cr.setLineWidth(2);
+
+        upHistory.forEach((v, i) => {
+            const x = (i / (maxSamples - 1)) * w;
+            const y = scale(v);
+            if (i === 0) cr.moveTo(x, y);
+            else cr.lineTo(x, y);
+        });
+        cr.stroke();
+    });
+
+    return area;
+};
+
   return (
-    <>
-        <menubutton $type="end" hexpand halign={Gtk.Align.END}>   
-            <box class="TimeBox">
-                <label label={"TEST"}></label>
+    <window
+      visible
+      name="profile-window"
+      class="profile-window"
+      exclusivity={Astal.Exclusivity.IGNORE}
+      anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
+      application={app}
+    >
+      <box orientation={Gtk.Orientation.VERTICAL} class="profile-popover-box" spacing={40}>
+        <box class="first-layer" spacing={20}>
+          <box>
+            <label class="profile_image" css={`background-image: url('${img}');`} />
+          </box>
+
+          <box orientation={Gtk.Orientation.VERTICAL} spacing={10}>
+            <label label={"󰣇  " + distroName} halign={Gtk.Align.START}/>
+            <label label={"  " + username} halign={Gtk.Align.START}/>
+            <label label={"   " + network.wifi.ssid} halign={Gtk.Align.START}/>
+          </box>
+        </box>
+
+        <box class="second-layer" orientation={Gtk.Orientation.VERTICAL}>
+          <box spacing={10} orientation={Gtk.Orientation.VERTICAL}>
+            <box>
+              <levelbar
+                orientation={Gtk.Orientation.HORIZONTAL}
+                widthRequest={250}
+                minValue={0}
+                maxValue={totalRam}
+                value={usedRam}
+              />
+              <label label={ramUsageLabel} css={`font-size: 20px;`}></label>
             </box>
 
-            <popover>
-              <box orientation={Gtk.Orientation.VERTICAL} class="profile-popover-box" spacing={40}>
-                <box class="first-layer" spacing={20}>
-                  <box>
-                    <label class="profile_image" css={`background-image: url('${img}');`} />
-                  </box>
+            <box>
+              <levelbar
+                orientation={Gtk.Orientation.HORIZONTAL}
+                widthRequest={250}
+                minValue={0}
+                maxValue={totalDisk}
+                value={usedDisk}
+              />
+              <label label={diskUsageLabel} css={`font-size: 20px;`}></label>
+            </box>
 
-                  <box orientation={Gtk.Orientation.VERTICAL} spacing={10}>
-                    <label label={"󰣇  " + distroName} halign={Gtk.Align.START}/>
-                    <label label={"  " + username} halign={Gtk.Align.START}/>
-                    <label label={"   " + network.wifi.ssid} halign={Gtk.Align.START}/>
-                  </box>
-                </box>
-
-                <box class="second-layer" orientation={Gtk.Orientation.VERTICAL}>
-                  <label label={"SECOND LAYER"}/>
-                  <box spacing={10} orientation={Gtk.Orientation.VERTICAL}>
-                    <box>
-                      <levelbar
-                        orientation={Gtk.Orientation.HORIZONTAL}
-                        widthRequest={250}
-                        minValue={0}
-                        maxValue={totalRam}
-                        value={usedRam}
-                      />
-                      <label label={ramUsageLabel} css={`font-size: 20px;`}></label>
-                    </box>
-
-                    <box>
-                      <levelbar
-                        orientation={Gtk.Orientation.HORIZONTAL}
-                        widthRequest={250}
-                        minValue={0}
-                        maxValue={totalRam}
-                        value={usedRam}
-                      />
-                      <label label={diskUsageLabel} css={`font-size: 20px;`}></label>
-                    </box>
-
-                  </box>
-                  <box orientation={Gtk.Orientation.VERTICAL}>
-                    <label label={downloadSpeedLabel} halign={Gtk.Align.START} ></label>
-                    <label label={uploadSpeedLabel} halign={Gtk.Align.START} ></label>
-                    <box>
-                      <label label={" "} halign={Gtk.Align.START}/>
-                      <slider
-                        min={0}
-                        max={1.3}
-                        widthRequest={260}
-                        onChangeValue={({ value }) => {speaker.set_volume(value);}}
-                        value={createBinding(speaker, "volume")}
-                      />
-                      <label label={volumeLabel} halign={Gtk.Align.START} ></label>
-                    </box>  
-                    <box>
-                      <label label={""} halign={Gtk.Align.START} css={`padding-left: 10px; margin-right: 7px`}/>
-                      <slider
-                        min={0}
-                        max={1.3}
-                        widthRequest={260}
-                        onChangeValue={({ value }) => {microphone.set_volume(value);}}
-                        value={createBinding(microphone, "volume")}
-                      />
-                      <label label={microphoneLabel} halign={Gtk.Align.START} ></label>
-                    </box>
-                  </box>
-                </box>
-
-                <box class="third-layer" spacing={20} halign={Gtk.Align.CENTER}> 
-                  <button onClicked={() => {
-                    execAsync(["bash", "-c", "setsid piper >/dev/null 2>&1 < /dev/null &"])
-                      .catch(err => console.error("Error executing 'piper':", err));
-                    }}>
-                    <label label={"󰍽"}/>
-                  </button>
-                  <button onClicked={() => {
-                    execAsync(["bash", "-c", "setsid pavucontrol >/dev/null 2>&1 < /dev/null &"])
-                      .catch(err => console.error("Error executing 'piper':", err));
-                    }}>
-                    <label label={" "}/>
-                  </button>
-                  <button onClicked={() => {
-                    execAsync(["bash", "-c", "setsid blueberry >/dev/null 2>&1 < /dev/null &"])
-                      .catch(err => console.error("Error executing 'piper':", err));
-                    }}>
-                    <label label={""}/>
-                  </button>
-                </box>
-
-                <box class="fourth-layer" spacing={20} halign={Gtk.Align.CENTER}> 
-                  <button onClicked={() => execAsync('loginctl terminate-session self').catch(console.error)}>
-                    <label label={"󰍃"}/>
-                  </button>
-                  <button onClicked={() => execAsync('systemctl suspend').catch(console.error)}>
-                    <label label={"󰤄"}/>
-                  </button>
-                  <button onClicked={() => execAsync('systemctl poweroff').catch(console.error)}>
-                    <label label={"⏻"}/>
-                  </button>
-                </box>
-              
+          </box>
+          <box orientation={Gtk.Orientation.VERTICAL}>
+            <box spacing={10} class={"network-status"}>
+              <box>
+                  <NetGraph width={250} height={70} maxSamples={60} />
               </box>
-          </popover>
-        </menubutton>
-    </>
+              <box orientation={Gtk.Orientation.VERTICAL} valign={Gtk.Align.CENTER}>
+                <label class={"download-label"} label={downloadSpeedLabel} halign={Gtk.Align.START} ></label>
+                <label class={"upload-label"} label={uploadSpeedLabel} halign={Gtk.Align.START} ></label>
+              </box>
+            </box>
+
+            <box>
+              <label label={" "} halign={Gtk.Align.START}/>
+              <slider
+                min={0}
+                max={1.3}
+                widthRequest={260}
+                onChangeValue={({ value }) => {speaker.set_volume(value);}}
+                value={createBinding(speaker, "volume")}
+              />
+              <label label={volumeLabel} halign={Gtk.Align.START} ></label>
+            </box>  
+            <box>
+              <label label={""} halign={Gtk.Align.START} css={`padding-left: 10px; margin-right: 7px`}/>
+              <slider
+                min={0}
+                max={1.3}
+                widthRequest={260}
+                onChangeValue={({ value }) => {microphone.set_volume(value);}}
+                value={createBinding(microphone, "volume")}
+              />
+              <label label={microphoneLabel} halign={Gtk.Align.START} ></label>
+            </box>
+          </box>
+        </box>
+
+        <box class="third-layer" spacing={20} halign={Gtk.Align.CENTER}> 
+          <button onClicked={() => {
+            execAsync(["bash", "-c", "setsid piper >/dev/null 2>&1 < /dev/null &"])
+              .catch(err => console.error("Error executing 'piper':", err));
+            }}>
+            <label label={"󰍽"}/>
+          </button>
+          <button onClicked={() => {
+            execAsync(["bash", "-c", "setsid pavucontrol >/dev/null 2>&1 < /dev/null &"])
+              .catch(err => console.error("Error executing 'pavucontrol':", err));
+            }}>
+            <label label={" "}/>
+          </button>
+          <button onClicked={() => {
+            execAsync(["bash", "-c", "setsid blueberry >/dev/null 2>&1 < /dev/null &"])
+              .catch(err => console.error("Error executing 'blueberry':", err));
+            }}>
+            <label label={""}/>
+          </button>
+        </box>
+
+        <box class="fourth-layer" spacing={20} halign={Gtk.Align.CENTER}> 
+          <button onClicked={() => execAsync('loginctl terminate-session self').catch(console.error)}>
+            <label label={"󰍃"}/>
+          </button>
+          <button onClicked={() => execAsync('systemctl suspend').catch(console.error)}>
+            <label label={"󰤄"}/>
+          </button>
+          <button onClicked={() => execAsync('systemctl poweroff').catch(console.error)}>
+            <label label={"⏻"}/>
+          </button>
+        </box>
+      </box>
+    </window>
   )
 }

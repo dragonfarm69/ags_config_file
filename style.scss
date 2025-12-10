@@ -11,6 +11,10 @@ $text-tertiary: rgba(255, 255, 255, 0.5);
 $bg-dark-alpha: rgba(0, 0, 0, 0.9);
 $bg-dark: #000000;
 $border-color: rgba(255, 255, 255, 0.1);
+$bg-primary: #3674B5;
+$bg-alt: #578FCA;
+$button-bg-hover: #6EA0D4;
+$text-color-primary: #D1F8EF;
 
 // Sizing & Radius
 $border-radius-sm: 8px;
@@ -23,12 +27,13 @@ $padding-lg: 14px;
 
 // --- Base Styles ---
 window.Bar {
+  padding: 20px;
   background: transparent;
   color: $fg-color;
   font-weight: bold;
 
   > centerbox {
-    background: $bg-color;
+    // background: $bg-color;
     border-radius: $border-radius-md;
     margin: $padding-sm;
   }
@@ -42,11 +47,10 @@ window.Bar {
 popover {
   background-color: transparent;
   border: none;
-  padding: $padding-sm;
-  
   > contents {
     background-color: transparent;
-    border-radius: $border-radius-md;
+    padding: $padding-sm;
+    border: none;
   }
 }
 
@@ -77,12 +81,16 @@ popover {
 
 // Clock & Calendar
 .TimeBox {
+  border-radius: $border-radius-md;
+  padding: 10px;
   font-size: 60px;
+  background-color: transparent;
+  color: $text-color-primary;
 }
 
 .calendar-popover-box {
   padding: $padding-md;
-  background-color: $bg-dark;
+  background-color: $bg-primary;
   border-radius: $border-radius-md;
 }
 
@@ -133,7 +141,7 @@ calendar {
   }
   
   label:hover {
-    background-color: rgba($text-primary, 0.1);
+    background-color: rgba($text-color-primary, 0.1);
     border-radius: $border-radius-circle;
   }
   
@@ -142,13 +150,18 @@ calendar {
   }
 }
 
-// Profile Popover
+// Profile Window
+window.profile-window {
+  background-color: transparent;
+  padding: $padding-md;
+}
+
 .profile-popover-box {
   border-radius: $border-radius-lg;
-  padding: $padding-md;
-  font-size: 25px;
+  padding: $padding-lg;
+  font-size: 22px;
   color: $text-primary;
-  background-color: $bg-dark;
+  background-color: $bg-primary;
 }
 
 .profile_image, .notification_image {
@@ -166,14 +179,46 @@ calendar {
   border-radius: 40px;
 }
 
+.first-layer, .second-layer {
+  font-size: 22px;
+  color: $text-primary;
+}
+
 // Power & Control Buttons
 .third-layer, .fourth-layer {
   button {
-    background-color: $red;
+    background-color: $bg-alt;
+    min-width: 80px;
+    min-height: 80px;
+    border-radius: $border-radius-md;
     label {
-      color: $blue;
+      color: $text-color-primary;
       font-size: 60px;
     }
   }
+
+  button:hover {
+    background-color: $button-bg-hover;
+  }
 }
 
+.time-menu-button {
+  background-color: $bg-primary;
+  border-radius: $border-radius-md;
+
+  &:hover {
+    background-color: $bg-alt;
+  }
+}
+
+.network-status {
+
+}
+
+.download-label {
+  color: red
+}
+
+.upload-label {
+  color: rgb(0, 255, 0);
+}
