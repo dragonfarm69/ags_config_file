@@ -46,7 +46,7 @@ const SystemMonitors = () => {
       <box spacing={10} orientation={Gtk.Orientation.VERTICAL}>
         <box spacing={10}>
           <levelbar 
-            widthRequest={250} 
+            widthRequest={160} 
             maxValue={System.totalRam} 
             value={System.usedRam} 
           />
@@ -54,7 +54,7 @@ const SystemMonitors = () => {
         </box>
         <box spacing={10}>
           <levelbar 
-            widthRequest={250}
+            widthRequest={160}
             maxValue={System.totalDisk} 
             value={System.usedDisk} 
           />

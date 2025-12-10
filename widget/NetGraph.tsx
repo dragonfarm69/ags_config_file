@@ -8,12 +8,12 @@ type NetGraphProps = {
   maxSamples?: number;
 };
 
-export const NetGraph = ({ width = 250, height = 70, maxSamples = 60 }: NetGraphProps) => {
+export const NetGraph = ({ width = 160, height = 70, maxSamples = 60 }: NetGraphProps) => {
     let downHistory = Array(maxSamples).fill(0);
     let upHistory = Array(maxSamples).fill(0);
     downloadSpeed.subscribe(() => area.queue_draw());
     uploadSpeed.subscribe(() => area.queue_draw());
-    
+
     const area = new Gtk.DrawingArea({
         width_request: width,
         height_request: height,
