@@ -7,6 +7,7 @@ import { ClockWidget } from "./Clock"
 import { ProfileWidget } from "./Profile"
 import { AnimationWidget } from "./Animation"
 import { WallpaperList } from "./wallpaper_viewer"
+import { NoteWidget } from "./Note"
 
 const img = `file:///${GLib.get_home_dir()}/.config/ags/assets/test.png`
 
@@ -104,11 +105,11 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         anchor={TOP | LEFT}
         application={app}
       >
-        <ClockWidget></ClockWidget>
+        {/* <ClockWidget></ClockWidget> */}
       </window>
 
       {/* Bottom Bar */}
-      <window
+      {/* <window
         visible
         name="bar-bottom"
         class="Bar"
@@ -127,16 +128,16 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             >
               <label label="Show Notification" />
             </button> */}
-            <AnimationWidget/>
-          </box>
-        </centerbox>
-      </window>
+            {/* <AnimationWidget/> */}
+          {/* </box> */}
+        {/* </centerbox> */}
+      {/* </window> */}
 
       {/* Profile Window */}
-      <ProfileWidget/>
+      {/* <ProfileWidget/> */}
 
       {/* Notifications Window - Only visible when there are notifications */}
-      <window
+      {/* <window
         visible={hasNotifications}
         name="notification"
         class="Notification"
@@ -150,7 +151,9 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
             {(notif: Notification) => <NotificationItem notif={notif} remove={removeNotification} />}
           </For>
         </box>
-      </window>
+      </window> */}
+
+      <NoteWidget />
 
 
       {/* <window

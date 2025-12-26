@@ -22,7 +22,7 @@ const formatBytes = (bytes: number) => {
 // --- UI Components ---
 
 const Header = () => (
-  <box class="first-layer" spacing={20}>
+  <box class="first-layer" spacing={20} halign={Gtk.Align.CENTER}>
     <label class="profile_image" css={`background-image: url('${img}');`} />
     <box orientation={Gtk.Orientation.VERTICAL} spacing={10}>
       <label label={`󰣇  ${System.distroName}`} halign={Gtk.Align.START}/>
@@ -41,7 +41,7 @@ const SystemMonitors = () => {
   const micLabel = createComputed(track => `${Math.round(track(createBinding(microphone, "volume")) * 100)}%`);
 
   return (
-    <box class="second-layer" orientation={Gtk.Orientation.VERTICAL} spacing={10}>
+    <box class="second-layer" orientation={Gtk.Orientation.VERTICAL} spacing={10} halign={Gtk.Align.CENTER}>
       {/* RAM and Disk */}
       <box spacing={10} orientation={Gtk.Orientation.VERTICAL}>
         <box spacing={10}>
@@ -80,7 +80,7 @@ const SystemMonitors = () => {
           onChangeValue={({ value }) => speaker.set_volume(value)} 
         />
         <label label={volumeLabel} /></box>
-      <box>
+      <box> 
         <label label="" css="padding-left: 10px; margin-right: 7px" />
         <slider 
           widthRequest={260} 
