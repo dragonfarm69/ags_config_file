@@ -7,12 +7,13 @@ $red: #ff6b6b;
 $blue: #4a90e2;
 $text-primary: #ffffff;
 $text-secondary: rgba(255, 255, 255, 0.6);
-$text-tertiary: rgba(255, 255, 255, 0.5);
+$text-tertiary: rgba(255, 255, 255, 1.0);
 $bg-dark-alpha: rgba(0, 0, 0, 0.9);
 $bg-dark: #000000;
 $border-color: rgba(255, 255, 255, 0.1);
 $bg-primary: #3674B5;
 $bg-alt: #578FCA;
+$bg-alt2: #005461;
 $button-bg-hover: #6EA0D4;
 $text-color-primary: #D1F8EF;
 
@@ -240,4 +241,134 @@ window.profile-window {
   color: $text-color-primary;
   background-color: $bg-alt;
   border-radius: 30px;
+}
+
+.note-content {
+  color: $text-tertiary;
+  background-color: $bg-dark-alpha;
+  padding: 12px;
+  font-size: 14px;
+  font-family: monospace;
+  min-width: 300px;
+  min-height: 300px
+}
+
+.note-content text selection {
+  background-color: lime;
+  color: black;
+}
+
+.note-main {
+  background-color: #4a90e2;
+}
+
+.close-note-button {
+  border-radius: 20px;
+  
+}
+
+.note-header {
+  padding: 2px;
+  background-color: $bg-primary;
+}
+
+.note-main {
+  background-color: $bg-primary;
+}
+
+.note-title {
+  margin-left: 10px;
+  color: $text-primary; 
+  font-family: "monospace";
+}
+
+.note-item {
+  font-family: "monospace";
+  min-width: 300px; 
+  //There's no max-width for some reason 
+  //((gjs:202832): Gjs-Console-CRITICAL **: 05:53:12.055: CSS Error :221:3 No property named "max-width")
+  //But setting min-width works
+}
+
+.note-selection {
+  padding: 10px;
+}
+
+.note-editor-container {
+  background-color: #4694fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 24px;
+  min-height: 400px;
+}
+
+.note-title-input {
+  color: #e4e4e7;
+  background-color: #252d38;
+  padding: 16px;
+  font-size: 14px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  min-width: 300px;
+  // max-width: 500px;
+  min-height: 200px;
+  // max-height: 300px;
+  border: 1px solid #2d3748;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:focus {
+    background-color: #2a3442;
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  // Scrollbar styling
+  scrollbar {
+    background-color: transparent;
+    // width: 8px;
+  }
+
+  scrollbar slider {
+    background-color: #3d4855;
+    border-radius: 4px;
+    min-height: 40px;
+
+    &:hover {
+      background-color: #4a5568;
+    }
+  }
+}
+
+.close-note-button .create-note-button {
+  background-color: $bg-alt2;
+  color: $text-secondary;
+  padding: 10px 32px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 120px;
+
+  &:hover {
+    background-color: #1d4ed8;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background-color: #1e40af;
+    transform: translateY(0);
+  }
+}
+
+.note-btn.primary {
+  background-color: $bg-alt2;
+}
+
+.note-btn.secondary {
+  background-color: $bg-alt2;
 }

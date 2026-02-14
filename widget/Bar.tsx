@@ -7,7 +7,9 @@ import { ClockWidget } from "./Clock"
 import { ProfileWidget } from "./Profile"
 import { AnimationWidget } from "./Animation"
 import { WallpaperList } from "./wallpaper_viewer"
-import { NoteWidget } from "./Note"
+import { NoteWidget } from "./Notes/Note"
+import { Accessor } from "gnim"
+import { ControlHub } from "./ControlHub"
 
 const img = `file:///${GLib.get_home_dir()}/.config/ags/assets/test.png`
 
@@ -109,7 +111,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       </window>
 
       {/* Bottom Bar */}
-      {/* <window
+      <window
         visible
         name="bar-bottom"
         class="Bar"
@@ -120,18 +122,21 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       >
         <centerbox cssName="centerbox">
           <box $type="start" hexpand halign={Gtk.Align.START}>
-            {/* <button
+            <button
               $type="start"
               onClicked={addNotification}
               hexpand
               halign={Gtk.Align.START}
             >
               <label label="Show Notification" />
-            </button> */}
-            {/* <AnimationWidget/> */}
-          {/* </box> */}
-        {/* </centerbox> */}
-      {/* </window> */}
+            </button>
+            <AnimationWidget/>
+          </box>
+        </centerbox>
+      </window>
+
+      <ControlHub></ControlHub>
+      {/* <NoteWidget></NoteWidget> */}
 
       {/* Profile Window */}
       {/* <ProfileWidget/> */}
@@ -152,8 +157,6 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
           </For>
         </box>
       </window> */}
-
-      <NoteWidget />
 
 
       {/* <window

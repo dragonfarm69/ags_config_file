@@ -1,7 +1,12 @@
-import { Gtk, Gdk } from "ags/gtk4"
+import { Gtk, Gdk, Astal } from "ags/gtk4"
 import { createPoll } from "ags/time"
 import { createComputed } from "gnim"
+import { createState } from "gnim"
+import { WindowManager } from "../lib/WindowManager"
+import { DRAG_THRESHOLD } from "../lib/constVariable"
 
+const DEFAULT_POSX = 100
+const DEFAULT_POSY = 100
 export const ClockWidget = () => {
   const date = createPoll(new Date(), 1000, () => new Date())
 
@@ -13,8 +18,51 @@ export const ClockWidget = () => {
 
   const dateMonth = createComputed((track) => `${track(day)}/${track(month)}`)
 
+  const [pos, setPosition] = createState({ x: DEFAULT_POSX, y: DEFAULT_POSY })
+
   return (
-    <>
+    <window
+      visible
+      name="note-widget"
+      layer={Astal.Layer.OVERLAY}
+      exclusivity={Astal.Exclusivity.IGNORE}
+      anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT}
+      keymode={Astal.Keymode.ON_DEMAND}
+      onDestroy={(self) => {
+        self.destroy()
+      }}
+      $={(self) => {
+        const drag = Gtk.GestureDrag.new()
+        let startX = 0
+        let startY = 0
+
+        drag.connect("drag-begin", () => {
+          startX = self.get_margin_left()
+          startY = self.get_margin_top()
+        })
+
+        drag.connect("drag-update", (_, dx, dy) => {
+          self.set_margin_left(Math.max(0, startX + dx))
+          self.set_margin_top(Math.max(0, startY + dy))
+        })
+
+        drag.connect("drag-end", (_, dx, dy) => {
+          setPosition({
+            x: Math.max(0, startX + dx),
+            y: Math.max(0, startY + dy),
+          })
+
+          const dragDistance = Math.sqrt(dx * dx + dy * dy)
+
+          if(dragDistance > DRAG_THRESHOLD) {
+            // console.log("Event drag-end")
+            WindowManager.saveWindowPosition("notes")
+          }
+        })
+
+        self.add_controller(drag)
+      }}
+    >
         <menubutton $type="end" hexpand halign={Gtk.Align.END} class={"time-menu-button"}>
         <box class={"TimeBox"}>
             <box class="HourBox">
@@ -49,6 +97,6 @@ export const ClockWidget = () => {
             </box>
         </popover>
         </menubutton>
-    </>
+    </window>
   )
 }

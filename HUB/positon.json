@@ -1,0 +1,21 @@
+{
+  "windows": [
+    {
+      "name": "notes",
+      "position": {
+        "x": 290,
+        "y": 352
+      },
+      "isOpen": false
+    },
+    {
+      "name": "profile",
+      "position": {
+        "x": 1209,
+        "y": 149
+      },
+      "isOpen": false
+    }
+  ],
+  "lastSaved": "2026-02-02T13:19:50.209Z"
+}

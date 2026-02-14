@@ -7,9 +7,16 @@ import { Astal } from "ags/gtk4";
 import app from "ags/gtk4/app";
 import * as System from "./services/System"
 import { NetGraph } from "./NetGraph";
+import { createState } from "gnim";
+import { WindowManager } from "../lib/WindowManager";
+import { DRAG_THRESHOLD } from "../lib/constVariable";
 
 const img = `file:///${GLib.get_home_dir()}/.config/ags/assets/Elizabeth.png`;
 const { defaultSpeaker: speaker, defaultMicrophone: microphone } = AstalWp.get_default()!;
+
+const DEFAULT_POSX = 100
+const DEFAULT_POSY = 100
+const [pos, setPosition] = createState({ x: DEFAULT_POSX, y: DEFAULT_POSY })
 
 const formatBytes = (bytes: number) => {
     if (bytes < 1024) return `${bytes.toFixed(0)} B/s`;
@@ -127,8 +134,42 @@ export const ProfileWidget = () => (
     name="profile-window"
     class="profile-window"
     exclusivity={Astal.Exclusivity.IGNORE}
-    anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.RIGHT}
+    anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT}
     application={app}
+    keymode={Astal.Keymode.ON_DEMAND}
+    onDestroy={(self) => {
+      self.destroy()
+    }}
+    $={(self) => {
+      const drag = Gtk.GestureDrag.new()
+      let startX = 0
+      let startY = 0
+
+      drag.connect("drag-begin", () => {
+        startX = self.get_margin_left()
+        startY = self.get_margin_top()
+      })
+
+      drag.connect("drag-update", (_, dx, dy) => {
+        self.set_margin_left(Math.max(0, startX + dx))
+        self.set_margin_top(Math.max(0, startY + dy))
+      })
+
+      drag.connect("drag-end", (_, dx, dy) => {
+        setPosition({
+          x: Math.max(0, startX + dx),
+          y: Math.max(0, startY + dy),
+        })
+
+        const dragDistance = Math.sqrt(dx * dx + dy * dy)
+        if(dragDistance > DRAG_THRESHOLD) {
+          // console.log("Event drag-end")
+          WindowManager.saveWindowPosition("notes")
+        }
+      })
+
+      self.add_controller(drag)
+    }}
   >
     <box orientation={Gtk.Orientation.VERTICAL} class="profile-popover-box" spacing={40}>
       <Header />
