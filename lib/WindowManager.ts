@@ -214,11 +214,20 @@ class WindowManagerClass {
   }
 
   /**
+   * Toggle all windows
+   */
+  toggleAll() {
+    this.windows.forEach((window, name) => {
+      this.toggle(name)
+    })
+  }
+
+  /**
    * Close all windows
    */
   closeAll() {
     this.windows.forEach((window, name) => {
-      this.hide(name)
+      this.close(name)
     })
   }
 

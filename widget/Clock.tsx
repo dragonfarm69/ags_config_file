@@ -23,7 +23,7 @@ export const ClockWidget = () => {
   return (
     <window
       visible
-      name="note-widget"
+      name="clock-widget"
       layer={Astal.Layer.OVERLAY}
       exclusivity={Astal.Exclusivity.IGNORE}
       anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT}
@@ -56,7 +56,7 @@ export const ClockWidget = () => {
 
           if(dragDistance > DRAG_THRESHOLD) {
             // console.log("Event drag-end")
-            WindowManager.saveWindowPosition("notes")
+            WindowManager.saveWindowPosition("clock")
           }
         })
 

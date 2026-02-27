@@ -4,13 +4,19 @@ import { NoteWidget } from "../widget/Notes/Note"
 import { ClockWidget } from "../widget/Clock"
 import { ProfileWidget } from "../widget/Profile"
 import { AnimationWidget } from "../widget/Animation"
-import { WallpaperList } from "../widget/wallpaper_viewer"
+import { ControlHub } from "../widget/ControlHub"
 
 /**
  * Register all window factories
  * This should be called once at app startup
  */
 export function registerWindowFactories() {
+
+  WindowManager.registerFactory("hub", () => {
+    return createRoot(() => ControlHub()) as any
+  })
+
+
   // Notes widget factory
   WindowManager.registerFactory("notes", () => {
     return createRoot(() => NoteWidget()) as any
@@ -27,9 +33,9 @@ export function registerWindowFactories() {
   })
 
   // Animation widget factory
-  WindowManager.registerFactory("animation", () => {
-    return createRoot(() => AnimationWidget()) as any
-  })
+  // WindowManager.registerFactory("animation", () => {
+  //   return createRoot(() => AnimationWidget()) as any
+  // })
 
 //   // Wallpaper viewer factory
 //   WindowManager.registerFactory("wallpaper", () => {

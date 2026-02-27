@@ -2,18 +2,23 @@ import { Gtk, Astal } from "ags/gtk4"
 import { createState, With } from "gnim"
 import { WindowManager, WindowName } from "../lib/WindowManager"
 
+export const [windowUpdateTrigger, setWindowUpdateTrigger] = createState(0)
+
+export function triggerWindowUpdate() {
+  setWindowUpdateTrigger(windowUpdateTrigger.get() + 1)
+}
+
 export const ControlHub = () => {
-  const [updateTrigger, setUpdateTrigger] = createState(0)
-  const windows: WindowName[] = ["clock", "profile", "animation", "wallpaper", "notes"]
+  const windows: WindowName[] = ["clock", "profile", "wallpaper", "notes"]
 
   const toggleWindow = (name: WindowName) => {
     WindowManager.toggle(name)
-    setUpdateTrigger(updateTrigger.get() + 1) // Force UI update
+    triggerWindowUpdate()
   }
 
   const closeWindow = (name: WindowName) => {
     WindowManager.close(name)
-    setUpdateTrigger(updateTrigger.get() + 1)
+    triggerWindowUpdate()
   }
 
   return (
@@ -40,7 +45,7 @@ export const ControlHub = () => {
           css="font-size: 18px; font-weight: bold; color: #eceff4; margin-bottom: 8px;" 
         />
         
-        <With value={updateTrigger}>
+        <With value={windowUpdateTrigger}>
           {(_) => (
             <box orientation={Gtk.Orientation.VERTICAL} spacing={4}>
               {windows.map((windowName) => {
@@ -102,7 +107,7 @@ export const ControlHub = () => {
           <button
             onClicked={() => {
               WindowManager.showAll()
-              setUpdateTrigger(updateTrigger.get() + 1)
+              triggerWindowUpdate()
             }}
             css="padding: 8px; background-color: #a3be8c; color: #2e3440; border-radius: 4px; font-weight: bold;"
             hexpand
@@ -113,7 +118,7 @@ export const ControlHub = () => {
           <button
             onClicked={() => {
               WindowManager.closeAll()
-              setUpdateTrigger(updateTrigger.get() + 1)
+              triggerWindowUpdate()
             }}
             css="padding: 8px; background-color: #bf616a; color: #eceff4; border-radius: 4px; font-weight: bold;"
             hexpand
@@ -125,7 +130,7 @@ export const ControlHub = () => {
         <button
           onClicked={() => {
             WindowManager.destroyAll()
-            setUpdateTrigger(updateTrigger.get() + 1)
+            triggerWindowUpdate()
           }}
           css="padding: 8px; background-color: #d08770; color: #2e3440; border-radius: 4px; font-weight: bold; margin-top: 4px;"
         >
