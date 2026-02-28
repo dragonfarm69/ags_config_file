@@ -1,6 +1,5 @@
 import app from "ags/gtk4/app"
 import style from "./style.scss"
-import Bar from "./widget/Bar"
 import { registerWindowFactories } from "./lib/WindowFactory"
 import { WindowManager } from "./lib/WindowManager"
 import { ControlHub, triggerWindowUpdate } from "./widget/ControlHub"
@@ -28,7 +27,6 @@ app.start({
   main() {
     WindowManager.show("hub")
     WindowManager.restoreSession()
-    app.get_monitors().map(Bar)
   },
 })
 
