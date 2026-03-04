@@ -27,7 +27,7 @@ $padding-md: 12px;
 $padding-lg: 14px;
 
 // --- Base Styles ---
-window.Bar {
+window {
   padding: 20px;
   background: transparent;
   color: $fg-color;
@@ -45,14 +45,19 @@ window.Bar {
   }
 }
 
-popover {
-  background-color: transparent;
-  border: none;
-  > contents {
+popover,
+popover contents {
     background-color: transparent;
-    padding: $padding-sm;
+    background-image: none;
     border: none;
-  }
+    box-shadow: none;
+    outline: none;
+    padding: 0;
+}
+
+popover > arrow {
+    background-color: transparent;
+    border: none;
 }
 
 // --- Component Styles ---
@@ -371,4 +376,69 @@ window.profile-window {
 
 .note-btn.secondary {
   background-color: $bg-alt2;
+}
+
+.timer-button {
+  padding: $padding-md $padding-lg;
+  background-color: $bg-primary;
+  color: $text-primary;
+  font-size: 14px;
+}
+
+.clock-status {
+  padding: $padding-md $padding-lg;
+  background-color: $bg-primary;
+  color: $text-primary;
+  font-size: 14px;
+}
+
+.clock-status:hover {
+  background-color: $bg-alt;
+}
+
+.clock-status:hover {
+  background-color: $bg-alt;
+}
+
+.TimerBox {
+  border-radius: $border-radius-md;
+  padding: 10px;
+  font-size: 60px;
+  background-color: $bg-primary;
+  color: $text-color-primary;
+}
+
+.timer-content {
+  color: $text-tertiary;
+  background-color: $bg-alt;
+  font-size: 25px;
+  font-family: monospace;
+  min-width: 30px;
+}
+
+.CountDownBox {
+  border-radius: $border-radius-md;
+  padding: 10px;
+  background-color: $bg-primary;
+  color: $text-color-primary;
+  font-size: 60px;
+}
+
+.Hours, .Minutes, .Seconds {
+  padding: 10px;
+}
+
+.countDown-up-button, .countDown-down-button {
+  background-color: $bg-alt2;
+  color: $text-secondary;
+  padding: 10px 32px;
+  font-size: 30px;
+
+  &:hover {
+    background-color: #1d4ed8;
+  }
+
+  &:active {
+    background-color: #1e40af;
+  }
 }

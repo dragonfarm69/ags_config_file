@@ -1,24 +1,33 @@
 import { Gtk, Gdk, Astal } from "ags/gtk4"
-import { createPoll } from "ags/time"
-import { createComputed } from "gnim"
-import { createState } from "gnim"
+import { createState, With } from "gnim"
 import { WindowManager } from "../lib/WindowManager"
 import { DRAG_THRESHOLD } from "../lib/constVariable"
+import { ClockComponent } from "./Components/ClockComponent"
+import { TimerComponent } from "./Components/TimerComponent"
+import { CountDownComponent } from "./Components/CountDownComponent"
 
 const DEFAULT_POSX = 100
 const DEFAULT_POSY = 100
+
+export type ClockState = "clock" | "timer" | "countdown"
+
 export const ClockWidget = () => {
-  const date = createPoll(new Date(), 1000, () => new Date())
-
-  const hours = createComputed((track) => track(date).getHours().toString().padStart(2, '0'))
-  const minutes = createComputed((track) => track(date).getMinutes().toString().padStart(2, '0'))
-  const day = createComputed((track) => track(date).getDate().toString())
-  const month = createComputed((track) => (track(date).getMonth() + 1).toString()) // getMonth() is 0-indexed
-  const year = createComputed((track) => track(date).getFullYear().toString())
-
-  const dateMonth = createComputed((track) => `${track(day)}/${track(month)}`)
-
   const [pos, setPosition] = createState({ x: DEFAULT_POSX, y: DEFAULT_POSY })
+
+  const [state, setState] = createState<ClockState>("clock");
+
+  const renderContent = () => {
+    if (state.get() === "clock") {
+      return <ClockComponent></ClockComponent>
+    }
+    else if (state.get() === "timer") {
+      return <TimerComponent></TimerComponent>
+    }
+    else if (state.get() === "countdown") {
+      return <CountDownComponent></CountDownComponent>
+    }
+    return null
+  }
 
   return (
     <window
@@ -63,40 +72,39 @@ export const ClockWidget = () => {
         self.add_controller(drag)
       }}
     >
-        <menubutton $type="end" hexpand halign={Gtk.Align.END} class={"time-menu-button"}>
-        <box class={"TimeBox"}>
-            <box class="HourBox">
-                <label label={hours} />
-            </box>
+      <box hexpand={false} halign={Gtk.Align.START}>
+        <box orientation={Gtk.Orientation.VERTICAL}>
+          <button 
+            label={"Clock"} 
+            class={"clock-status"}
+            onClicked={() => {
+              setState("clock")
+            }}
+          ></button>
 
-            <box class="TimeSeperator">
-                <label label={":"}/>
-            </box>
-            
-            <box class="MinuteBox">
-                <label label={minutes} />
-            </box>
+          <button 
+            label={"Timer"} 
+            class={"clock-status"}
+            onClicked={() => {
+              setState("timer")
+              console.log(state.get())
+            }}
+          ></button>
+
+          <button 
+            label={"Count Down"} 
+            class={"clock-status"}
+            onClicked={() => {
+              setState("countdown")
+            }}
+          ></button>
         </box>
-
-        {/* <label label={timeLabel} /> */}
-        <popover>
-            <box orientation={Gtk.Orientation.VERTICAL} class="calendar-popover-box">
-                {/* Header section */}
-                <box orientation={Gtk.Orientation.VERTICAL} class="calendar-header">
-                    <label label={year} class="calendar-title" />
-                    <label label={dateMonth} class="calendar-time" />
-                </box>
-                
-                {/* Calendar */}
-                <Gtk.Calendar class="my-calendar" showHeading={false}/>
-                
-                {/* Optional footer */}
-                <box class="calendar-footer">
-                    <label label="Click a date to select" class="calendar-hint" />
-                </box>
-            </box>
-        </popover>
-        </menubutton>
+        <With
+          value={state}
+        >
+          {() => renderContent()}
+        </With>
+      </box>
     </window>
   )
 }
