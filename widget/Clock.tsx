@@ -1,5 +1,5 @@
-import { Gtk, Gdk, Astal } from "ags/gtk4"
-import { createState, With } from "gnim"
+import { Gtk, Astal } from "ags/gtk4"
+import { createState } from "gnim"
 import { WindowManager } from "../lib/WindowManager"
 import { DRAG_THRESHOLD } from "../lib/constVariable"
 import { ClockComponent } from "./Components/ClockComponent"
@@ -13,21 +13,8 @@ export type ClockState = "clock" | "timer" | "countdown"
 
 export const ClockWidget = () => {
   const [pos, setPosition] = createState({ x: DEFAULT_POSX, y: DEFAULT_POSY })
-
   const [state, setState] = createState<ClockState>("clock");
-
-  const renderContent = () => {
-    if (state.get() === "clock") {
-      return <ClockComponent></ClockComponent>
-    }
-    else if (state.get() === "timer") {
-      return <TimerComponent></TimerComponent>
-    }
-    else if (state.get() === "countdown") {
-      return <CountDownComponent></CountDownComponent>
-    }
-    return null
-  }
+  const [isTimerRunning, setIsTimerRunning] = createState<boolean>(false);
 
   return (
     <window
@@ -87,7 +74,6 @@ export const ClockWidget = () => {
             class={"clock-status"}
             onClicked={() => {
               setState("timer")
-              console.log(state.get())
             }}
           ></button>
 
@@ -99,11 +85,20 @@ export const ClockWidget = () => {
             }}
           ></button>
         </box>
-        <With
-          value={state}
-        >
-          {() => renderContent()}
-        </With>
+
+        <box>
+          <ClockComponent
+            isVisible={state((s) => s === "clock")}
+          />
+          <TimerComponent
+            isVisible={state((s) => s === "timer")}
+            setTimerRunningTrue={() => setIsTimerRunning(true)}
+            setTimerRunningFalse={() => setIsTimerRunning(false)}
+          />
+          <CountDownComponent
+            isVisible={state((s) => s === "countdown")}
+          />
+        </box>
       </box>
     </window>
   )

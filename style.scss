@@ -385,6 +385,10 @@ window.profile-window {
   font-size: 14px;
 }
 
+.timer-button:hover {
+  background-color: $bg-alt;
+}
+
 .clock-status {
   padding: $padding-md $padding-lg;
   background-color: $bg-primary;

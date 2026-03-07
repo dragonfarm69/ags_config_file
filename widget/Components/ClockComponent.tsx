@@ -1,8 +1,8 @@
 import { Gtk, Gdk, Astal } from "ags/gtk4"
 import { createPoll } from "ags/time"
 import { createComputed } from "gnim"
-
-export const ClockComponent = () => {
+import { Accessor } from "gnim"
+export const ClockComponent = ({isVisible} : {isVisible: Accessor<boolean>}) => {
   const date = createPoll(new Date(), 1000, () => new Date())
 
   const hours = createComputed((track) => track(date).getHours().toString().padStart(2, '0'))
@@ -14,7 +14,7 @@ export const ClockComponent = () => {
   const dateMonth = createComputed((track) => `${track(day)}/${track(month)}`)
 
   return (
-    <menubutton $type="end" hexpand halign={Gtk.Align.END} class={"time-menu-button"}>
+    <menubutton $type="end" hexpand halign={Gtk.Align.END} class={"time-menu-button"} visible={isVisible}>
         <box class={"TimeBox"}>
             <box class="HourBox">
                 <label label={hours} />

@@ -1,8 +1,8 @@
 import { Gtk } from "ags/gtk4"
 import { interval } from "ags/time"
-import { createComputed, createState, With } from "gnim"
+import { createComputed, createState, With, Accessor } from "gnim"
 
-export const CountDownComponent = () => {
+export const CountDownComponent = ({isVisible} : {isVisible: Accessor<boolean>}) => {
   const [startTimer, setStartTimer] = createState(false)
 
   const [hourTime, setHourTime] = createState(0)
@@ -10,10 +10,9 @@ export const CountDownComponent = () => {
   const [secondTime, setSecondTime] = createState(0)
 
   return (
-    <box>
-      <box class={"CountDownBox"} spacing={20}>
+    <box visible={isVisible}>
+      <box class={"CountDownBox"} spacing={10}>
         <box class="HourBox">
-          {/* <label label={"Hours"}/> */}
           <label
             class="Hours"
             label={hourTime((v) => v.toString().padStart(2, "0"))}

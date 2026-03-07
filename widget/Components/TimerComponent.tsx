@@ -1,7 +1,7 @@
 import { interval } from "ags/time"
-import { createComputed, createState, With } from "gnim"
+import { createComputed, createState, With, Accessor } from "gnim"
 
-export const TimerComponent = () => {
+export const TimerComponent = ({isVisible, setTimerRunningTrue, setTimerRunningFalse} : {isVisible: Accessor<boolean>, setTimerRunningTrue: () => void, setTimerRunningFalse: () => void}) => {
   const [startTimer, setStartTimer] = createState<boolean>(false)
   const [elapsedSeconds, setElapsedSeconds] = createState<number>(0)
   
@@ -20,6 +20,7 @@ export const TimerComponent = () => {
   )
 
   const startTimerFunc = () => {
+    console.log("starting timer")
     intervalId = interval(1000, () => {
       setElapsedSeconds(elapsedSeconds.get() + 1)
     })
@@ -40,7 +41,7 @@ export const TimerComponent = () => {
   }
 
   return (
-    <box css={"min-width: 500px; max-width: 1000px;"}>
+    <box visible={isVisible}>
       <box class={"TimerBox"}>
         <box class="HourBox">
           <label label={hours((h) => h.toString().padStart(2, '0'))} />
@@ -62,17 +63,22 @@ export const TimerComponent = () => {
       <With value={startTimer}>
         {(value) => 
           value ? 
-          <box>
+          <box css={"background-color: red;"}>
             <button 
                 label={"Stop timer"}
                 class={"timer-button"}
-                onClicked={stopTimerFunc}
-            />
-                        
+                onClicked={() => {
+                  stopTimerFunc()
+                  setTimerRunningFalse()
+                }}
+            />    
             <button 
                 label={"Reset timer"}
                 class={"timer-button"}
-                onClicked={resetTimerFunc}
+                onClicked={() => {
+                  resetTimerFunc()
+                  setTimerRunningFalse()
+                }}
             />
           </box>
           :
@@ -80,13 +86,20 @@ export const TimerComponent = () => {
             <button 
                 label={"Start timer"}
                 class={"timer-button"}
-                onClicked={startTimerFunc}
+                onClicked={ () => {
+                    startTimerFunc()
+                    setTimerRunningTrue()
+                  }
+                }
             />
                         
             <button 
                 label={"Reset timer"}
                 class={"timer-button"}
-                onClicked={resetTimerFunc}
+                onClicked={() => {
+                  resetTimerFunc()
+                  setTimerRunningFalse()
+                }}
             />
           </box>
         }
