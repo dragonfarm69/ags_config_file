@@ -34,7 +34,6 @@ export const ClockComponent = ({
     <menubutton
       $type="end"
       hexpand
-      halign={Gtk.Align.END}
       class={"time-menu-button"}
       visible={isVisible}
     >

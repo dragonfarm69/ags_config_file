@@ -1,31 +1,4 @@
-// --- Variables ---
-$fg-color: #{"@theme_fg_color"};
-$bg-color: #{"@theme_bg_color"};
-
-// Colors
-$red: #ff6b6b;
-$blue: #4a90e2;
-$text-primary: #ffffff;
-$text-secondary: rgba(255, 255, 255, 0.6);
-$text-tertiary: rgba(255, 255, 255, 1.0);
-$bg-dark-alpha: rgba(0, 0, 0, 0.9);
-$bg-dark: #000000;
-$border-color: rgba(255, 255, 255, 0.1);
-$bg-primary: #3674B5;
-$bg-alt: #578FCA;
-$bg-alt2: #005461;
-$button-bg-hover: #6EA0D4;
-$text-color-primary: #D1F8EF;
-
-// Sizing & Radius
-$border-radius-sm: 8px;
-$border-radius-md: 12px;
-$border-radius-lg: 30px;
-$border-radius-circle: 50%;
-$padding-sm: 8px;
-$padding-md: 12px;
-$padding-lg: 14px;
-
+`
 // --- Base Styles ---
 window {
   padding: 20px;
@@ -361,25 +334,31 @@ window.profile-window {
 }
 
 .timer-button {
-  padding: $padding-md $padding-lg;
-  background-color: $bg-primary;
+  padding: $padding-md;
+  background-color: $bg-alt2;
   color: $text-primary;
-  font-size: 14px;
+  font-size: 30px;
+
+  &:hover {
+    background-color: $bg-alt;
+  }
 }
 
 // .timer-button:hover {
 //   background-color: $bg-alt;
 // }
 
-.clock-status-container {
+.clock-window-container {
   background-color: $bg-alt2;
   color: $text-primary;
-  font-size: 64px;
-  padding: 15px;
+  border-radius: 15px;
+  font-size: 50px;
 }
 
 .clock-status {
   background-color: transparent;
+  min-width: 60px;
+  min-height: 60px;
 
   &:hover {
     background-color: $bg-alt;
@@ -387,8 +366,10 @@ window.profile-window {
 }
 
 .clock-status label {
-  margin-right: 20px;
+  margin-right: 15px;
 }
+
+
 
 .timer-content {
   color: $text-tertiary;
@@ -396,6 +377,12 @@ window.profile-window {
   font-size: 25px;
   font-family: monospace;
   min-width: 30px;
+}
+
+.timer-button-container {
+  font-size: 64px;
+  padding: 15px;
+  // background-color: red;
 }
 
 // .TimerBox {
@@ -412,11 +399,18 @@ window.profile-window {
 
 // }
 
-.TimerBox, .CountDownBox {
+.TimerBox {
   padding: 10px;
   background-color: $bg-primary;
   color: $text-color-primary;
   font-size: 60px;
+}
+
+.CountDownBox {
+  padding: 10px;
+  background-color: $bg-primary;
+  color: $text-color-primary;
+  font-size: 45px;
 }
 
 .time-menu-button {
@@ -448,6 +442,18 @@ window.profile-window {
 
 }
 
+
+.countDown-button {
+  padding: $padding-md;
+  background-color: $bg-alt2;
+  color: $text-primary;
+  font-size: 18px;
+
+  &:hover {
+    background-color: $bg-alt;
+  }
+}
+
 .timezone-label {
   padding: 10px;
   font-size: 15px;
@@ -471,7 +477,6 @@ window.profile-window {
 .countDown-up-button, .countDown-down-button {
   background-color: $bg-alt2;
   color: $text-secondary;
-  padding: 10px 32px;
   font-size: 30px;
 
   &:hover {
@@ -481,4 +486,27 @@ window.profile-window {
   &:active {
     background-color: #1e40af;
   }
+}
+
+.clock-content-container {
+  // background-color: $bg-primary;
+  // border-radius: 15px;
+  padding: $padding-md;
+}
+
+.countdown-title {
+  font-size: 25px;
+}
+
+.clock-sidebar {
+  border: 2px solid $border-color;  // full border first
+  border-top: none;
+  border-left: none;
+  border-bottom: none;
+  padding: $padding-md;
+}
+
+.countDown-button-container {
+  font-size: 32px;
+  padding: 15px;
 }

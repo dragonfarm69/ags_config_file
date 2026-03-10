@@ -59,44 +59,57 @@ export const ClockWidget = () => {
         self.add_controller(drag)
       }}
     >
-      <box hexpand={false} halign={Gtk.Align.START}>
+      <box
+        class={"clock-window-container"}
+        halign={Gtk.Align.START}
+        spacing={10}
+        widthRequest={550}
+        heightRequest={300}
+      >
         <box
-          class={"clock-status-container"}
+          class={"clock-sidebar"}
           orientation={Gtk.Orientation.VERTICAL}
-          valign={Gtk.Align.CENTER}
+          vexpand
         >
-          <button
+          <box
             valign={Gtk.Align.CENTER}
-            halign={Gtk.Align.CENTER}
-            label={"󰥔"}
-            class={"clock-status"}
-            onClicked={() => {
-              setState("clock")
-            }}
-          ></button>
+            orientation={Gtk.Orientation.VERTICAL}
+            spacing={8}
+            vexpand
+          >
+            <button
+              valign={Gtk.Align.CENTER}
+              halign={Gtk.Align.CENTER}
+              label={"󰥔"}
+              class={"clock-status"}
+              onClicked={() => {
+                setState("clock")
+              }}
+            ></button>
 
-          <button
-            valign={Gtk.Align.CENTER}
-            halign={Gtk.Align.CENTER}
-            label={"󱎫"}
-            class={"clock-status"}
-            onClicked={() => {
-              setState("timer")
-            }}
-          ></button>
+            <button
+              valign={Gtk.Align.CENTER}
+              halign={Gtk.Align.CENTER}
+              label={"󱎫"}
+              class={"clock-status"}
+              onClicked={() => {
+                setState("timer")
+              }}
+            ></button>
 
-          <button
-            valign={Gtk.Align.CENTER}
-            halign={Gtk.Align.CENTER}
-            label={"󱫌"}
-            class={"clock-status"}
-            onClicked={() => {
-              setState("countdown")
-            }}
-          ></button>
+            <button
+              valign={Gtk.Align.CENTER}
+              halign={Gtk.Align.CENTER}
+              label={"󱫌"}
+              class={"clock-status"}
+              onClicked={() => {
+                setState("countdown")
+              }}
+            ></button>
+          </box>
         </box>
 
-        <box css={"background-color: red;"}>
+        <box class={"clock-content-container"} hexpand vexpand>
           <ClockComponent isVisible={state((s) => s === "clock")} />
           <TimerComponent
             isVisible={state((s) => s === "timer")}
