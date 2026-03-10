@@ -15,6 +15,8 @@ export const ClockWidget = () => {
   const [pos, setPosition] = createState({ x: DEFAULT_POSX, y: DEFAULT_POSY })
   const [state, setState] = createState<ClockState>("clock")
   const [isTimerRunning, setIsTimerRunning] = createState<boolean>(false)
+  const [isCountDownRunning, setIsCountDownRunning] =
+    createState<boolean>(false)
 
   return (
     <window
@@ -116,7 +118,11 @@ export const ClockWidget = () => {
             setTimerRunningTrue={() => setIsTimerRunning(true)}
             setTimerRunningFalse={() => setIsTimerRunning(false)}
           />
-          <CountDownComponent isVisible={state((s) => s === "countdown")} />
+          <CountDownComponent
+            isVisible={state((s) => s === "countdown")}
+            setCountDownRunningTrue={() => setIsCountDownRunning(true)}
+            setCountDownRunningFalse={() => setIsCountDownRunning(false)}
+          />
         </box>
       </box>
     </window>

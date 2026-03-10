@@ -28,6 +28,7 @@ export const TimerComponent = ({
 
   const startTimerFunc = () => {
     console.log("starting timer")
+    if (intervalId) return
     intervalId = interval(1000, () => {
       setElapsedSeconds(elapsedSeconds.get() + 1)
     })

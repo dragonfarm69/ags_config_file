@@ -13,10 +13,9 @@ app.start({
     const [cmd, arg, ...rest] = argv
     if (cmd == "toggle") {
       //toggle all windows
-      if(arg == "all") {
+      if (arg == "all") {
         WindowManager.toggleAll()
-      }
-      else {
+      } else {
         WindowManager.close(arg as WindowName)
       }
       triggerWindowUpdate()
