@@ -13,8 +13,8 @@ export type ClockState = "clock" | "timer" | "countdown"
 
 export const ClockWidget = () => {
   const [pos, setPosition] = createState({ x: DEFAULT_POSX, y: DEFAULT_POSY })
-  const [state, setState] = createState<ClockState>("clock");
-  const [isTimerRunning, setIsTimerRunning] = createState<boolean>(false);
+  const [state, setState] = createState<ClockState>("clock")
+  const [isTimerRunning, setIsTimerRunning] = createState<boolean>(false)
 
   return (
     <window
@@ -50,7 +50,7 @@ export const ClockWidget = () => {
 
           const dragDistance = Math.sqrt(dx * dx + dy * dy)
 
-          if(dragDistance > DRAG_THRESHOLD) {
+          if (dragDistance > DRAG_THRESHOLD) {
             // console.log("Event drag-end")
             WindowManager.saveWindowPosition("clock")
           }
@@ -60,25 +60,35 @@ export const ClockWidget = () => {
       }}
     >
       <box hexpand={false} halign={Gtk.Align.START}>
-        <box orientation={Gtk.Orientation.VERTICAL}>
-          <button 
-            label={"Clock"} 
+        <box
+          class={"clock-status-container"}
+          orientation={Gtk.Orientation.VERTICAL}
+          valign={Gtk.Align.CENTER}
+        >
+          <button
+            valign={Gtk.Align.CENTER}
+            halign={Gtk.Align.CENTER}
+            label={"󰥔"}
             class={"clock-status"}
             onClicked={() => {
               setState("clock")
             }}
           ></button>
 
-          <button 
-            label={"Timer"} 
+          <button
+            valign={Gtk.Align.CENTER}
+            halign={Gtk.Align.CENTER}
+            label={"󱎫"}
             class={"clock-status"}
             onClicked={() => {
               setState("timer")
             }}
           ></button>
 
-          <button 
-            label={"Count Down"} 
+          <button
+            valign={Gtk.Align.CENTER}
+            halign={Gtk.Align.CENTER}
+            label={"󱫌"}
             class={"clock-status"}
             onClicked={() => {
               setState("countdown")
@@ -86,18 +96,14 @@ export const ClockWidget = () => {
           ></button>
         </box>
 
-        <box>
-          <ClockComponent
-            isVisible={state((s) => s === "clock")}
-          />
+        <box css={"background-color: red;"}>
+          <ClockComponent isVisible={state((s) => s === "clock")} />
           <TimerComponent
             isVisible={state((s) => s === "timer")}
             setTimerRunningTrue={() => setIsTimerRunning(true)}
             setTimerRunningFalse={() => setIsTimerRunning(false)}
           />
-          <CountDownComponent
-            isVisible={state((s) => s === "countdown")}
-          />
+          <CountDownComponent isVisible={state((s) => s === "countdown")} />
         </box>
       </box>
     </window>

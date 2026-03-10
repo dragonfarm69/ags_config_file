@@ -56,7 +56,7 @@ popover contents {
 }
 
 popover > arrow {
-    background-color: transparent;
+    background-color: $bg-primary;
     border: none;
 }
 
@@ -83,15 +83,6 @@ popover > arrow {
 
 .notification_content_box {
   padding: 6px 0;
-}
-
-// Clock & Calendar
-.TimeBox {
-  border-radius: $border-radius-md;
-  padding: 10px;
-  font-size: 60px;
-  background-color: transparent;
-  color: $text-color-primary;
 }
 
 .calendar-popover-box {
@@ -205,15 +196,6 @@ window.profile-window {
 
   button:hover {
     background-color: $button-bg-hover;
-  }
-}
-
-.time-menu-button {
-  background-color: $bg-primary;
-  border-radius: $border-radius-md;
-
-  &:hover {
-    background-color: $bg-alt;
   }
 }
 
@@ -385,31 +367,27 @@ window.profile-window {
   font-size: 14px;
 }
 
-.timer-button:hover {
-  background-color: $bg-alt;
+// .timer-button:hover {
+//   background-color: $bg-alt;
+// }
+
+.clock-status-container {
+  background-color: $bg-alt2;
+  color: $text-primary;
+  font-size: 64px;
+  padding: 15px;
 }
 
 .clock-status {
-  padding: $padding-md $padding-lg;
-  background-color: $bg-primary;
-  color: $text-primary;
-  font-size: 14px;
+  background-color: transparent;
+
+  &:hover {
+    background-color: $bg-alt;
+  }
 }
 
-.clock-status:hover {
-  background-color: $bg-alt;
-}
-
-.clock-status:hover {
-  background-color: $bg-alt;
-}
-
-.TimerBox {
-  border-radius: $border-radius-md;
-  padding: 10px;
-  font-size: 60px;
-  background-color: $bg-primary;
-  color: $text-color-primary;
+.clock-status label {
+  margin-right: 20px;
 }
 
 .timer-content {
@@ -420,8 +398,66 @@ window.profile-window {
   min-width: 30px;
 }
 
-.CountDownBox {
-  border-radius: $border-radius-md;
+// .TimerBox {
+
+// }
+
+// // Clock & Calendar
+// .TimeBox {
+
+// }
+
+
+// .CountDownBox {
+
+// }
+
+.TimerBox, .CountDownBox {
+  padding: 10px;
+  background-color: $bg-primary;
+  color: $text-color-primary;
+  font-size: 60px;
+}
+
+.time-menu-button {
+  background-color: $bg-primary;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+}
+
+.time-menu-button > button {
+  background-color: $bg-primary;
+  border-radius: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.date-box {
+  background-color: transparent;
+  font-size: 24px;
+}
+
+.date-label {
+
+}
+
+.time-container {
+
+}
+
+.timezone-label {
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 15px;
+  background-color: $bg-alt2;
+}
+
+// .time
+
+.TimeBox {
   padding: 10px;
   background-color: $bg-primary;
   color: $text-color-primary;
