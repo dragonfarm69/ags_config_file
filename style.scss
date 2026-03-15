@@ -230,6 +230,10 @@ window.profile-window {
   border-radius: 30px;
 }
 
+.note-window{
+  background-color: $bg-alt2;
+}
+
 .note-content {
   color: $text-tertiary;
   background-color: $bg-dark-alpha;
@@ -271,7 +275,7 @@ window.profile-window {
 
 .note-item {
   font-family: "monospace";
-  min-width: 300px; 
+  min-width: 100px; 
   //There's no max-width for some reason 
   //((gjs:202832): Gjs-Console-CRITICAL **: 05:53:12.055: CSS Error :221:3 No property named "max-width")
   //But setting min-width works
@@ -281,12 +285,24 @@ window.profile-window {
   padding: 10px;
 }
 
+.note-viewer {
+  border: 5px solid $border-color;  // full border first
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  // padding: $padding-md;
+}
+
 .note-editor-container {
   background-color: #4694fa;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   padding: 24px;
   min-height: 400px;
+}
+
+.note-scroll-window {
+  padding: $padding-md;
 }
 
 .note-title-input {

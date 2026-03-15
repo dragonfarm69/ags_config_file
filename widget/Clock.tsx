@@ -5,6 +5,10 @@ import { DRAG_THRESHOLD } from "../lib/constVariable"
 import { ClockComponent } from "./Components/ClockComponent"
 import { TimerComponent } from "./Components/TimerComponent"
 import { CountDownComponent } from "./Components/CountDownComponent"
+import WebKit2 from "gi://WebKit2?version=4.1" 
+import WebKit241 from "gi://WebKit2"
+import WebKit2WebExtension from "gi://WebKit2WebExtension?version=4.1"
+import WebKit2WebExtension41 from "gi://WebKit2WebExtension"
 
 const DEFAULT_POSX = 100
 const DEFAULT_POSY = 100

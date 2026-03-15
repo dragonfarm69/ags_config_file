@@ -9,13 +9,18 @@ type ScrollingLabelProps = {
   class?: string
 }
 
-export const ScrollingLabel = ({ text, maxChars, displayChars, class: className }: ScrollingLabelProps) => {
+export const ScrollingLabel = ({
+  text,
+  maxChars,
+  displayChars,
+  class: className,
+}: ScrollingLabelProps) => {
   return (
     <label
       class={className}
       $={(self) => {
-        self.set_size_request(240, -1)
-        
+        // self.set_size_request(240, -1)
+
         if (text.length > maxChars) {
           self.set_label(text.substring(0, maxChars) + "...")
         } else {
@@ -34,7 +39,8 @@ export const ScrollingLabel = ({ text, maxChars, displayChars, class: className 
 
           if (text.length > displayChars) {
             scrollInterval = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 75, () => {
-              const displayedText = text.substring(offset) + "  |  " + text.substring(0, offset)
+              const displayedText =
+                text.substring(offset) + "  |  " + text.substring(0, offset)
               self.set_label(displayedText.substring(0, displayChars))
               offset = (offset + 1) % text.length
               return GLib.SOURCE_CONTINUE

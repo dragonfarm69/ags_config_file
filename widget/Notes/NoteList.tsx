@@ -9,9 +9,14 @@ type NoteListProps = {
   onCreateNew: () => void
 }
 
-export const NoteList = ({ notes, onNoteSelect, onCreateNew }: NoteListProps) => {
+export const NoteList = ({
+  notes,
+  onNoteSelect,
+  onCreateNew,
+}: NoteListProps) => {
   return (
     <scrolledwindow
+      class={"note-scroll-window"}
       $={(self) => {
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.set_max_content_height(500)
@@ -22,13 +27,23 @@ export const NoteList = ({ notes, onNoteSelect, onCreateNew }: NoteListProps) =>
       <With value={notes}>
         {(notesList) =>
           notesList && (
-            <box orientation={Gtk.Orientation.VERTICAL} spacing={4} class="note-selection">
+            <box
+              orientation={Gtk.Orientation.VERTICAL}
+              spacing={4}
+              class="note-selection"
+            >
               {notesList.map((note) => (
-                <button class="note-item" onClicked={() => onNoteSelect(note.id)}>
-                  <ScrollingLabel text={note.title} maxChars={25} displayChars={30} />
+                <button
+                  class="note-item"
+                  onClicked={() => onNoteSelect(note.id)}
+                >
+                  <ScrollingLabel
+                    text={note.title}
+                    maxChars={25}
+                    displayChars={30}
+                  />
                 </button>
               ))}
-              
               <button class="create-new-note" onClicked={onCreateNew}>
                 <label label="Create New Note" />
               </button>

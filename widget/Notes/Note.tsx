@@ -94,13 +94,12 @@ export const NoteWidget = () => {
 
           const dragDistance = Math.sqrt(dx * dx + dy * dy)
 
-          if(dragDistance > DRAG_THRESHOLD) {
+          if (dragDistance > DRAG_THRESHOLD) {
             // console.log("Event drag-end")
             WindowManager.saveWindowPosition("notes")
           } else {
             // console.log("Not saving")
           }
-
         })
 
         self.add_controller(drag)
@@ -110,6 +109,7 @@ export const NoteWidget = () => {
         orientation={Gtk.Orientation.HORIZONTAL}
         class="note-window"
         spacing={10}
+        halign={Gtk.Align.START}
       >
         {/* Note List Sidebar */}
         <NoteList
