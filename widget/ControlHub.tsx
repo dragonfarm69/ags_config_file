@@ -82,7 +82,7 @@ export const ControlHub = () => {
                     </button>
                     
                     {/* Close button - only show if window exists */}
-                    {exists && (
+                    {exists && windowName !== "svg" && (
                       <button
                         onClicked={() => closeWindow(windowName)}
                         css={`
