@@ -9,7 +9,7 @@ export function triggerWindowUpdate() {
 }
 
 export const ControlHub = () => {
-  const windows: WindowName[] = ["clock", "profile", "wallpaper", "notes"]
+  const windows: WindowName[] = ["clock", "profile", "wallpaper", "notes", "svg"]
 
   const toggleWindow = (name: WindowName) => {
     WindowManager.toggle(name)
