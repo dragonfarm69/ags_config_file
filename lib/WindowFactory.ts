@@ -6,6 +6,7 @@ import { ProfileWidget } from "../widget/Profile"
 import { AnimationWidget } from "../widget/Animation"
 import { ControlHub } from "../widget/ControlHub"
 import { SVGTEST } from "../widget/svg_test"
+import { Planner } from "../widget/Planner"
 
 /**
  * Register all window factories
@@ -35,6 +36,10 @@ export function registerWindowFactories() {
 
   WindowManager.registerFactory("svg", () => {
     return createRoot(() => SVGTEST()) as any
+  })
+
+  WindowManager.registerFactory("planner", () => {
+    return createRoot(() => Planner()) as any
   })
 
   // Animation widget factory

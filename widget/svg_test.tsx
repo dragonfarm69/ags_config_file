@@ -99,6 +99,9 @@ export const SVGTEST = () => {
       exclusivity={Astal.Exclusivity.NORMAL}
       anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT}
       keymode={Astal.Keymode.ON_DEMAND}
+      onDestroy={(self) => {
+        self.destroy()
+      }}
     >
       <overlay>
         <Gtk.Picture

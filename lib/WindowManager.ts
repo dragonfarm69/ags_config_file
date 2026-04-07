@@ -7,7 +7,7 @@ export const AGS_CONFIG_DIR = `${GLib.get_user_config_dir()}/ags`
 export const HUB_MAIN_DIR = `${AGS_CONFIG_DIR}/HUB`
 export const HUB_CONTENT = `${HUB_MAIN_DIR}/positon.json`
 
-export type WindowName = "clock" | "profile" | "animation" | "wallpaper" | "notes" | "hub" | "svg"
+export type WindowName = "clock" | "profile" | "animation" | "wallpaper" | "notes" | "hub" | "svg" | "planner"
 
 // Type for window factory functions
 type WindowFactory = () => Astal.Window
