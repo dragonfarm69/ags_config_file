@@ -6,7 +6,7 @@ import { ProfileWidget } from "../widget/Profile"
 import { AnimationWidget } from "../widget/Animation"
 import { ControlHub } from "../widget/ControlHub"
 import { SVGTEST } from "../widget/svg_test"
-import { Planner } from "../widget/Planner"
+import { Planner } from "../widget/Planner/Planner"
 
 /**
  * Register all window factories

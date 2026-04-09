@@ -1,5 +1,6 @@
 import { Gtk, Astal, Gdk } from "ags/gtk4"
 import GObject from "gi://GObject"
+import { PlannerStorage } from "./PlannerStorage"
 
 // Global Drag Reference
 let currentlyDraggedWidget: Gtk.Widget | null = null
@@ -94,6 +95,8 @@ function DraggableItem(label: string) {
           currentParent.remove(currentlyDraggedWidget)
           columnBox.append(currentlyDraggedWidget)
         }
+        //save to file
+        // PlannerStorage.
         return true
       }
       return false
