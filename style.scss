@@ -7,15 +7,15 @@ $red: #ff6b6b;
 $blue: #4a90e2;
 $text-primary: #ffffff;
 $text-secondary: rgba(255, 255, 255, 0.6);
-$text-tertiary: rgba(255, 255, 255, 1.0);
+$text-tertiary: rgba(255, 255, 255, 1);
 $bg-dark-alpha: rgba(0, 0, 0, 0.9);
 $bg-dark: #000000;
 $border-color: rgba(255, 255, 255, 0.1);
-$bg-primary: #3674B5;
-$bg-alt: #578FCA;
+$bg-primary: #3674b5;
+$bg-alt: #578fca;
 $bg-alt2: #005461;
-$button-bg-hover: #6EA0D4;
-$text-color-primary: #D1F8EF;
+$button-bg-hover: #6ea0d4;
+$text-color-primary: #d1f8ef;
 
 // Sizing & Radius
 $border-radius-sm: 8px;
@@ -47,17 +47,17 @@ window {
 
 popover,
 popover contents {
-    background-color: transparent;
-    background-image: none;
-    border: none;
-    box-shadow: none;
-    outline: none;
-    padding: 0;
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  padding: 0;
 }
 
 popover > arrow {
-    background-color: $bg-primary;
-    border: none;
+  background-color: $bg-primary;
+  border: none;
 }
 
 // --- Component Styles ---
@@ -120,28 +120,28 @@ calendar {
     font-size: 14px;
     padding: 4px;
   }
-  
+
   label.day-name {
     color: $text-secondary;
     font-weight: bold;
   }
-  
+
   label.today {
     background-color: $red;
     border-radius: $border-radius-circle;
     color: $text-primary;
   }
-  
+
   label:selected {
     background-color: rgba($red, 0.5);
     border-radius: $border-radius-circle;
   }
-  
+
   label:hover {
     background-color: rgba($text-color-primary, 0.1);
     border-radius: $border-radius-circle;
   }
-  
+
   label.other-month {
     color: rgba($text-primary, 0.3);
   }
@@ -161,7 +161,8 @@ window.profile-window {
   background-color: $bg-primary;
 }
 
-.profile_image, .notification_image {
+.profile_image,
+.notification_image {
   min-width: 56px;
   min-height: 56px;
   background-size: cover;
@@ -176,13 +177,15 @@ window.profile-window {
   border-radius: 40px;
 }
 
-.first-layer, .second-layer {
+.first-layer,
+.second-layer {
   font-size: 22px;
   color: $text-primary;
 }
 
 // Power & Control Buttons
-.third-layer, .fourth-layer {
+.third-layer,
+.fourth-layer {
   button {
     background-color: $bg-alt;
     min-width: 80px;
@@ -200,11 +203,10 @@ window.profile-window {
 }
 
 .network-status {
-
 }
 
 .download-label {
-  color: red
+  color: red;
 }
 
 .upload-label {
@@ -230,7 +232,7 @@ window.profile-window {
   border-radius: 30px;
 }
 
-.note-window{
+.note-window {
   background-color: $bg-alt2;
 }
 
@@ -241,7 +243,7 @@ window.profile-window {
   font-size: 14px;
   font-family: monospace;
   min-width: 300px;
-  min-height: 300px
+  min-height: 300px;
 }
 
 .note-content text selection {
@@ -255,7 +257,6 @@ window.profile-window {
 
 .close-note-button {
   border-radius: 20px;
-  
 }
 
 .note-header {
@@ -269,14 +270,14 @@ window.profile-window {
 
 .note-title {
   margin-left: 10px;
-  color: $text-primary; 
+  color: $text-primary;
   font-family: "monospace";
 }
 
 .note-item {
   font-family: "monospace";
-  min-width: 100px; 
-  //There's no max-width for some reason 
+  min-width: 100px;
+  //There's no max-width for some reason
   //((gjs:202832): Gjs-Console-CRITICAL **: 05:53:12.055: CSS Error :221:3 No property named "max-width")
   //But setting min-width works
 }
@@ -286,7 +287,7 @@ window.profile-window {
 }
 
 .note-viewer {
-  border: 5px solid $border-color;  // full border first
+  border: 5px solid $border-color; // full border first
   border-top: none;
   border-right: none;
   border-bottom: none;
@@ -310,7 +311,7 @@ window.profile-window {
   background-color: #252d38;
   padding: 16px;
   font-size: 14px;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
   min-width: 300px;
   // max-width: 500px;
   min-height: 200px;
@@ -412,8 +413,6 @@ window.profile-window {
   margin-right: 15px;
 }
 
-
-
 .timer-content {
   color: $text-tertiary;
   background-color: $bg-alt;
@@ -436,7 +435,6 @@ window.profile-window {
 // .TimeBox {
 
 // }
-
 
 // .CountDownBox {
 
@@ -478,13 +476,10 @@ window.profile-window {
 }
 
 .date-label {
-
 }
 
 .time-container {
-
 }
-
 
 .countDown-button {
   padding: $padding-md;
@@ -513,11 +508,14 @@ window.profile-window {
   font-size: 60px;
 }
 
-.Hours, .Minutes, .Seconds {
+.Hours,
+.Minutes,
+.Seconds {
   padding: 10px;
 }
 
-.countDown-up-button, .countDown-down-button {
+.countDown-up-button,
+.countDown-down-button {
   background-color: $bg-alt2;
   color: $text-secondary;
   font-size: 30px;
@@ -542,7 +540,7 @@ window.profile-window {
 }
 
 .clock-sidebar {
-  border: 2px solid $border-color;  // full border first
+  border: 2px solid $border-color; // full border first
   border-top: none;
   border-left: none;
   border-bottom: none;
@@ -570,9 +568,55 @@ progressbar.countDown-progress trough progress {
   margin-right: 250px;
 }
 
-.planner-box {
-  background: #333; 
-  padding: 10px; 
-  border-radius: 5px; 
+.planner-main {
+  padding: 20px;
+  background-color: $bg-alt;
+  border-radius: 12px;
+}
+
+.planner-scroll-window {
+  padding: $padding-md;
+}
+
+.plan-selection {
+  padding: 10px;
+}
+
+.plan-item {
+  font-family: "monospace";
+  min-width: 100px;
+}
+
+.plan-box {
+  background: $bg-color;
+  padding: 10px;
+  border-radius: 5px;
   margin: 5px;
+}
+
+.plan-view-item {
+  min-width: 200px;
+  min-height: 300px;
+  background: $bg-alt2;
+  padding: 10px;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+.plan-content {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #0dcaff;
+}
+
+.draggable-plan-item {
+  background: $blue;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.draggable-plan-item.dragging {
+  background: $bg-dark;
+  padding: 10px;
+  border-radius: 6px;
 }

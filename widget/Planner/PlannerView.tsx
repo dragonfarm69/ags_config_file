@@ -18,7 +18,7 @@ let currentlyDraggedWidget: Gtk.Widget | null = null
 export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
   function DraggableItem(label: string) {
     const item = (
-      <box css="background: #333; padding: 10px; margin: 5px; border-radius: 6px;">
+      <box class={"draggable-plan-item"}>
         <label label={label} />
       </box>
     ) as Gtk.Box
@@ -40,8 +40,8 @@ export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
       const icon = Gtk.DragIcon.get_for_drag(drag)
       icon.set_child(
         (
-          <box css="background: rgba(230, 57, 70, 0.8); padding: 10px; border-radius: 6px;">
-            <label label={label} css="color: white; font-weight: bold;" />
+          <box class={"draggable-plan-item dragging"}>
+            <label label={label} class={"plan-content"}/>
           </box>
         ) as Gtk.Box,
       )
@@ -92,11 +92,11 @@ export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
       <box
         orientation={Gtk.Orientation.VERTICAL}
         spacing={4}
-        css="min-width: 200px; min-height: 300px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-right: 15px;"
+        class={"plan-view-item"}
       >
         <label
           label={title}
-          css="font-weight: bold; margin-bottom: 10px; color: #0dcaff;"
+          class={"plan-content"}
         />
       </box>
     ) as Gtk.Box
@@ -128,7 +128,7 @@ export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
     return columnBox
   }
   return (
-    <box css="padding: 20px; background: #1d1b1a; border-radius: 12px;">
+    <box class={"plan-view"}>
       <For each={plans}>
         {(item, index) => PlannerColumn(item.title, item.items)}
       </For>

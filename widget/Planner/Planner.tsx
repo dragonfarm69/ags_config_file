@@ -1,10 +1,9 @@
 import { Gtk, Astal, Gdk } from "ags/gtk4"
-import GObject from "gi://GObject"
 import { PlannerStorage } from "./PlannerStorage"
-import { Accessor, createState, For, With } from "gnim"
+import { Accessor, createState } from "gnim"
 import { PlannerChooser } from "./PlannerChooser"
 import { PlannerViewer } from "./PlannerView"
-import { PlanFileMeta, PlanItem, PlannerData, Plans } from "./PlannerVariable" // Added Plans
+import { PlanItem, PlannerData, Plans } from "./PlannerVariable"
 import { WindowManager } from "../../lib/WindowManager"
 import { DEFAULT_POSX, DEFAULT_POSY } from "./PlannerConstants"
 import { DRAG_THRESHOLD } from "../../lib/constVariable"
@@ -78,41 +77,8 @@ export const Planner = () => {
       onDestroy={(self) => {
         self.destroy()
       }}
-      $={(self) => {
-        const drag = Gtk.GestureDrag.new()
-        let startX = 0
-        let startY = 0
-
-        drag.connect("drag-begin", () => {
-          startX = self.get_margin_left()
-          startY = self.get_margin_top()
-        })
-
-        drag.connect("drag-update", (_, dx, dy) => {
-          self.set_margin_left(Math.max(0, startX + dx))
-          self.set_margin_top(Math.max(0, startY + dy))
-        })
-
-        drag.connect("drag-end", (_, dx, dy) => {
-          setPosition({
-            x: Math.max(0, startX + dx),
-            y: Math.max(0, startY + dy),
-          })
-
-          const dragDistance = Math.sqrt(dx * dx + dy * dy)
-
-          if (dragDistance > DRAG_THRESHOLD) {
-            // console.log("Event drag-end")
-            WindowManager.saveWindowPosition("notes")
-          } else {
-            // console.log("Not saving")
-          }
-        })
-
-        self.add_controller(drag)
-      }}
     >
-      <box css="padding: 20px; background: #1d1b1a; border-radius: 12px;">
+      <box class={"planner-main"}>
         <PlannerChooser plans={plans} onPlanSelect={onPlanSelect} />
 
         <revealer

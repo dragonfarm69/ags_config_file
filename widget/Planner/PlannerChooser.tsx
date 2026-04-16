@@ -11,7 +11,7 @@ interface PlannerChooserProps {
 export const PlannerChooser = ({plans, onPlanSelect}: PlannerChooserProps) => {
   return (
         <scrolledwindow
-          class={"note-scroll-window"}
+          class={"planner-scroll-window"}
           $={(self) => {
             self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
             self.set_max_content_height(500)
@@ -25,11 +25,11 @@ export const PlannerChooser = ({plans, onPlanSelect}: PlannerChooserProps) => {
                 <box
                   orientation={Gtk.Orientation.VERTICAL}
                   spacing={4}
-                  class="note-selection"
+                  class="plan-selection"
                 >
                   {planList.map((plan) => (
                     <button
-                      class="note-item"
+                      class="plan-item"
                       onClicked={() => onPlanSelect(plan.id)}
                     >
                       <label
