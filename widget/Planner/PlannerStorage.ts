@@ -1,7 +1,11 @@
 import GLib from "gi://GLib?version=2.0"
 import { FileUtils } from "../services/File"
-import { MAIN_DIR, PLANNER_CONTENT_DIR, PLANNER_INDEX } from "./PlannerConstants"
-import { PlannerItem } from "./PlannerItem"
+import {
+  MAIN_DIR,
+  PLANNER_CONTENT_DIR,
+  PLANNER_INDEX,
+} from "./PlannerConstants"
+import { PlanFileMeta } from "./PlannerVariable"
 
 export class PlannerStorage {
   static initialize() {
@@ -12,7 +16,7 @@ export class PlannerStorage {
 
     if (!GLib.file_test(PLANNER_INDEX, GLib.FileTest.IS_REGULAR)) {
       console.log("Creating index file at:", PLANNER_INDEX)
-      const index = JSON.stringify({ notes: [] }, null, 2)
+      const index = JSON.stringify({ plans: [] }, null, 2)
       GLib.file_set_contents(PLANNER_INDEX, index)
     }
 
@@ -22,7 +26,7 @@ export class PlannerStorage {
     }
   }
 
-  static loadAll(): PlannerItem[] {
+  static loadAll(): PlanFileMeta[] {
     try {
       const indexContent = GLib.file_get_contents(PLANNER_INDEX)[1]
       if (!indexContent) {
@@ -31,7 +35,8 @@ export class PlannerStorage {
       }
 
       const indexData = JSON.parse(new TextDecoder().decode(indexContent))
-      return indexData.notes || []
+      console.log("INDEX JSON DATA: ", indexData)
+      return indexData.plans || []
     } catch (e) {
       console.error("Error loading index file:", e)
       return []
@@ -39,13 +44,17 @@ export class PlannerStorage {
   }
 
   static create(title: string, content: string = ""): boolean {
-    const fileName = `${title.trim()}.txt`
+    const fileName = `${title.trim()}.json`
     const filePath = `${PLANNER_CONTENT_DIR}/${fileName}`
 
     const fileCreated = FileUtils.writeFile(filePath, content)
     if (!fileCreated) return false
 
-    const indexUpdated = FileUtils.updateIndex(PLANNER_INDEX, filePath, title.trim())
+    const indexUpdated = FileUtils.updateIndex(
+      PLANNER_INDEX,
+      filePath,
+      title.trim(),
+    )
     return indexUpdated
   }
 

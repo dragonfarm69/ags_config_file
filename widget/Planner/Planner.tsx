@@ -1,122 +1,136 @@
 import { Gtk, Astal, Gdk } from "ags/gtk4"
 import GObject from "gi://GObject"
 import { PlannerStorage } from "./PlannerStorage"
-
-// Global Drag Reference
-let currentlyDraggedWidget: Gtk.Widget | null = null
+import { Accessor, createState, For, With } from "gnim"
+import { PlannerChooser } from "./PlannerChooser"
+import { PlannerViewer } from "./PlannerView"
+import { PlanFileMeta, PlanItem, PlannerData, Plans } from "./PlannerVariable" // Added Plans
+import { WindowManager } from "../../lib/WindowManager"
+import { DEFAULT_POSX, DEFAULT_POSY } from "./PlannerConstants"
+import { DRAG_THRESHOLD } from "../../lib/constVariable"
 
 export const Planner = () => {
-function DraggableItem(label: string) {
-    const item = (
-      <box css="background: #333; padding: 10px; margin: 5px; border-radius: 6px;">
-        <label label={label} />
-      </box>
-    ) as Gtk.Box
+  const [pos, setPosition] = createState({ x: DEFAULT_POSX, y: DEFAULT_POSY })
+  const [plans, setPlans] = createState(PlannerStorage.loadAll())
+  const [planData, setPlanData] = createState<PlannerData>({ plans: [] })
+  const [selectedId, setSelectedId] = createState<string | null>("")
+  let updateRevealer: (() => void) | null = null
 
-    const dragSource = new Gtk.DragSource()
-    dragSource.set_actions(Gdk.DragAction.MOVE)
+  const firstPlan = plans.get()[0]
 
-    dragSource.connect("prepare", () => {
-      const val = new GObject.Value()
-      val.init(GObject.TYPE_STRING)
-      val.set_string(label)
-      return Gdk.ContentProvider.new_for_value(val)
-    })
+  const data = firstPlan ? PlannerStorage.read(firstPlan.filePath) : null
 
-    dragSource.connect("drag-begin", (_, drag) => {
-      currentlyDraggedWidget = item 
-      item.set_opacity(0.4) 
-
-      const icon = Gtk.DragIcon.get_for_drag(drag)
-      icon.set_child(
-        <box css="background: rgba(230, 57, 70, 0.8); padding: 10px; border-radius: 6px;">
-          <label label={label} css="color: white; font-weight: bold;" />
-        </box> as Gtk.Box
-      )
-    })
-
-    dragSource.connect("drag-end", () => {
-      item.set_opacity(1.0)
-      currentlyDraggedWidget = null
-    })
-
-    const dropTarget = Gtk.DropTarget.new(GObject.TYPE_STRING, Gdk.DragAction.MOVE)
-
-    dropTarget.connect("drop", (target, value, x, y) => {
-      if (!currentlyDraggedWidget || currentlyDraggedWidget === item) return false
-
-      const targetParent = item.get_parent() as Gtk.Box
-      const currentParent = currentlyDraggedWidget.get_parent() as Gtk.Box
-
-      if (currentParent) {
-        currentParent.remove(currentlyDraggedWidget)
-      }
-
-      const itemHeight = item.get_allocated_height()
-      
-      if (y < itemHeight / 2) {
-        targetParent.insert_child_after(currentlyDraggedWidget, item.get_prev_sibling())
-      } else {
-        targetParent.insert_child_after(currentlyDraggedWidget, item)
-      }
-
-      return true
-    })
-
-    item.add_controller(dragSource)
-    item.add_controller(dropTarget)
-    return item
-  }
-  
-  function PlannerColumn(title: string, initialTasks: string[]) {
-    const columnBox = (
-      <box 
-        orientation={Gtk.Orientation.VERTICAL} 
-        spacing={4} 
-        css="min-width: 200px; min-height: 300px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-right: 15px;"
-      >
-        <label label={title} css="font-weight: bold; margin-bottom: 10px; color: #0dcaff;" />
-      </box>
-    ) as Gtk.Box
-
-    initialTasks.forEach(task => {
-      columnBox.append(DraggableItem(task))
-    })
-
-    const dropTarget = Gtk.DropTarget.new(
-      GObject.TYPE_STRING,
-      Gdk.DragAction.MOVE,
+  function isPlanItem(value: unknown): value is PlanItem {
+    if (typeof value !== "object" || value === null) return false
+    const v = value as Record<string, unknown>
+    return (
+      typeof v.title === "string" &&
+      typeof v.description === "string" &&
+      typeof v.created_date === "string" &&
+      typeof v.updated_date === "string" &&
+      typeof v.deadline === "string"
     )
-
-    dropTarget.connect("drop", () => {
-      if (currentlyDraggedWidget) {
-        const currentParent = currentlyDraggedWidget.get_parent() as Gtk.Box
-        if (currentParent && currentParent !== columnBox) {
-          currentParent.remove(currentlyDraggedWidget)
-          columnBox.append(currentlyDraggedWidget)
-        }
-        //save to file
-        // PlannerStorage.
-        return true
-      }
-      return false
-    })
-
-    columnBox.add_controller(dropTarget)
-    return columnBox
   }
+
+  // Changed to return value is Plans
+  function isPlan(value: unknown): value is Plans {
+    if (typeof value !== "object" || value === null) return false
+    const v = value as Record<string, unknown>
+    return (
+      typeof v.title === "string" &&
+      Array.isArray(v.items) &&
+      v.items.every(isPlanItem)
+    )
+  }
+
+  // Changed to return value is PlannerData
+  function isPlannerData(value: unknown): value is PlannerData {
+    if (typeof value !== "object" || value === null) return false
+    const v = value as Record<string, unknown>
+    return (
+      Array.isArray(v.plans) &&
+      v.plans.every(isPlan) &&
+      (v.lastSaved === undefined || typeof v.lastSaved === "string")
+    )
+  }
+
+  function onPlanSelect(id: string) {
+    let index = plans.get().findIndex((plan) => plan.id === id)
+    
+    setSelectedId(plans.get()[index].id)
+    if (updateRevealer) updateRevealer()
+  }
+
+  const parsedUnknown: unknown = data ? JSON.parse(data) : null
+
+  // Updated type from PlanFileMeta to PlannerData
+  const dataParsed: PlannerData = isPlannerData(parsedUnknown)
+    ? parsedUnknown
+    : { plans: [] }
+  setPlanData(dataParsed)
 
   return (
     <window
       visible
-      name="planner-widget"
+      name="planner"
       layer={Astal.Layer.OVERLAY}
       anchor={Astal.WindowAnchor.TOP | Astal.WindowAnchor.LEFT}
+      onDestroy={(self) => {
+        self.destroy()
+      }}
+      $={(self) => {
+        const drag = Gtk.GestureDrag.new()
+        let startX = 0
+        let startY = 0
+
+        drag.connect("drag-begin", () => {
+          startX = self.get_margin_left()
+          startY = self.get_margin_top()
+        })
+
+        drag.connect("drag-update", (_, dx, dy) => {
+          self.set_margin_left(Math.max(0, startX + dx))
+          self.set_margin_top(Math.max(0, startY + dy))
+        })
+
+        drag.connect("drag-end", (_, dx, dy) => {
+          setPosition({
+            x: Math.max(0, startX + dx),
+            y: Math.max(0, startY + dy),
+          })
+
+          const dragDistance = Math.sqrt(dx * dx + dy * dy)
+
+          if (dragDistance > DRAG_THRESHOLD) {
+            // console.log("Event drag-end")
+            WindowManager.saveWindowPosition("notes")
+          } else {
+            // console.log("Not saving")
+          }
+        })
+
+        self.add_controller(drag)
+      }}
     >
       <box css="padding: 20px; background: #1d1b1a; border-radius: 12px;">
-        {PlannerColumn("To Do", ["Finish Login UI", "Fix Memory Leak"])}
-        {PlannerColumn("In Progress", ["Drink Water"])}
-        {PlannerColumn("Done", ["Setup Arch Linux", "Install Niri"])}
+        <PlannerChooser plans={plans} onPlanSelect={onPlanSelect} />
+
+        <revealer
+          transitionType={Gtk.RevealerTransitionType.SLIDE_RIGHT}
+          transitionDuration={60}
+          $={(self) => {
+            updateRevealer = () => {
+              const shouldReveal =
+                selectedId.get() !== null && selectedId.get() !== ""
+              self.set_reveal_child(shouldReveal)
+            }
+            updateRevealer()
+          }}
+        >
+          <box orientation={Gtk.Orientation.VERTICAL}>
+            <PlannerViewer plans={new Accessor(() => planData.get().plans)} />
+          </box>
+        </revealer>
       </box>
     </window>
   )
