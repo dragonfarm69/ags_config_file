@@ -2,6 +2,7 @@ import { Gtk, Astal, Gdk } from "ags/gtk4"
 import GObject from "gi://GObject"
 import { Accessor, With } from "gnim";
 import { PlanFileMeta } from "./PlannerVariable"
+import { ScrollingLabel } from "../Components/ScrollingLabel";
 
 interface PlannerChooserProps {
   plans: Accessor<PlanFileMeta[]>;
@@ -32,10 +33,10 @@ export const PlannerChooser = ({plans, onPlanSelect}: PlannerChooserProps) => {
                       class="plan-item"
                       onClicked={() => onPlanSelect(plan.id)}
                     >
-                      <label
-                        label={plan.title}
-                        // maxChars={25}
-                        // displayChars={30}
+                      <ScrollingLabel
+                        text={plan.title}
+                        maxChars={25}
+                        displayChars={30}
                       />
                     </button>
                   ))}

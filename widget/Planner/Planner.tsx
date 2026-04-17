@@ -13,10 +13,10 @@ export const Planner = () => {
   const [plans, setPlans] = createState(PlannerStorage.loadAll())
   const [planData, setPlanData] = createState<PlannerData>({ plans: [] })
   const [selectedId, setSelectedId] = createState<string | null>("")
+
   let updateRevealer: (() => void) | null = null
 
   const firstPlan = plans.get()[0]
-
   const data = firstPlan ? PlannerStorage.read(firstPlan.filePath) : null
 
   function isPlanItem(value: unknown): value is PlanItem {

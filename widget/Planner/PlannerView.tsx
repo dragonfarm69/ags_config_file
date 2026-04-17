@@ -5,6 +5,8 @@ import { PlanItem, PlannerData, Plans } from "./PlannerVariable"
 import { PlannerStorage } from "./PlannerStorage"
 import { createState, For } from "gnim"
 import { PlannerChooser } from "./PlannerChooser"
+import { ScrollingLabel } from "../Components/ScrollingLabel"
+import { PlanEditBox } from "./PlanEditBox"
 
 interface PlannerViewerProps {
   plans: Accessor<Plans[]>
@@ -16,10 +18,53 @@ interface PlannerViewerProps {
 let currentlyDraggedWidget: Gtk.Widget | null = null
 
 export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
-  function DraggableItem(label: string) {
+  const [editItem, setEditItem] = createState<PlanItem | null>(null)
+
+  let updateRevealer: (() => void) | null = null
+  let updateTextView: (() => void) | null = null
+
+  function onClicked(self: Gtk.Button) {
+    console.log(self, "was clicked")
+  }
+
+  function DraggableItem(data: PlanItem) {
     const item = (
-      <box class={"draggable-plan-item"}>
-        <label label={label} />
+      <box
+        class={"draggable-plan-item"}
+        hasTooltip
+        $={(self) =>
+          self.connect("query-tooltip", (_, __, ___, ____, tooltip) => {
+            const customView = (
+              <box
+                orientation={Gtk.Orientation.VERTICAL}
+                spacing={8}
+                css="padding: 10px;"
+              >
+                <label label={"Status: " + data.title} />
+                <label label={"Description: " + data.description} />
+                <label label="Status: Done/Not done/Something" />
+                <label label="Created date: DATE" />
+                <label label="Deadline: DATE" />
+                <label label="Click to edit" />
+              </box>
+            ) as Gtk.Widget
+
+            tooltip.set_custom(customView)
+            return true
+          })
+        }
+      >
+        <Gtk.GestureClick
+          propagationPhase={Gtk.PropagationPhase.CAPTURE}
+          button={Gdk.BUTTON_SECONDARY}
+          onPressed={() => {
+            if (currentlyDraggedWidget === item) return
+            print("clicked with primary button")
+            setEditItem(data)
+            print("Editing item: ", editItem.get()?.title)
+          }}
+        />
+        <ScrollingLabel text={data.title} maxChars={25} displayChars={30} />
       </box>
     ) as Gtk.Box
 
@@ -29,7 +74,7 @@ export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
     dragSource.connect("prepare", () => {
       const val = new GObject.Value()
       val.init(GObject.TYPE_STRING)
-      val.set_string(label)
+      val.set_string(data.title)
       return Gdk.ContentProvider.new_for_value(val)
     })
 
@@ -41,7 +86,7 @@ export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
       icon.set_child(
         (
           <box class={"draggable-plan-item dragging"}>
-            <label label={label} class={"plan-content"}/>
+            <label label={data.title} class={"plan-content"} />
           </box>
         ) as Gtk.Box,
       )
@@ -94,15 +139,12 @@ export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
         spacing={4}
         class={"plan-view-item"}
       >
-        <label
-          label={title}
-          class={"plan-content"}
-        />
+        <ScrollingLabel text={title} maxChars={25} displayChars={30} />
       </box>
     ) as Gtk.Box
 
     initialTasks.forEach((task) => {
-      columnBox.append(DraggableItem(task.description))
+      columnBox.append(DraggableItem(task))
     })
 
     const dropTarget = Gtk.DropTarget.new(
@@ -128,10 +170,29 @@ export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
     return columnBox
   }
   return (
-    <box class={"plan-view"}>
-      <For each={plans}>
-        {(item, index) => PlannerColumn(item.title, item.items)}
-      </For>
+    <box orientation={Gtk.Orientation.VERTICAL}>
+      <box class={"plan-view"}>
+        <For each={plans}>
+          {(item, index) => PlannerColumn(item.title, item.items)}
+        </For>
+      </box>
+      <revealer
+        transitionType={Gtk.RevealerTransitionType.SLIDE_DOWN}
+        transitionDuration={60}
+        revealChild={editItem((item) => item !== null)}
+      >
+        <box orientation={Gtk.Orientation.VERTICAL}>
+          <With value={editItem}>
+            {(item) =>
+              item !== null ? (
+                <PlanEditBox planItem={editItem as Accessor<PlanItem>} />
+              ) : (
+                <box />
+              )
+            }
+          </With>
+        </box>
+      </revealer>
     </box>
   )
 }
