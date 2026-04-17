@@ -10,13 +10,14 @@ export const PlanEdit = ({data, title}: PlanEditProps) => {
     const [text, setText] = createState("")
 
   return (
-    <box hexpand vexpand>
+    <box hexpand vexpand
+    >
         <label label={title}/>
         <Gtk.TextView
         hexpand={true}
         vexpand={true} 
         wrap_mode={Gtk.WrapMode.WORD_CHAR}
-        class={title}
+        class={"plan-edit-content"}
         margin_top={10}
         margin_bottom={10}
         margin_start={10}
@@ -25,6 +26,7 @@ export const PlanEdit = ({data, title}: PlanEditProps) => {
             self.buffer.set_text(data, -1)
 
             self.buffer.connect("changed", () => {
+                console.log("Changing")
                 const start = self.buffer.get_start_iter()
                 const end = self.buffer.get_end_iter()
                 setText(self.buffer.get_text(start, end, false))

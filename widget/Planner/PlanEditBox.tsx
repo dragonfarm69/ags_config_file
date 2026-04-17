@@ -11,11 +11,11 @@ export const PlanEditBox = ({planItem}: PlanEditBoxProps) => {
   console.log("Plan item: ", planItem.get().title)
   return (
     <box orientation={Gtk.Orientation.VERTICAL}>
-        <PlanEdit title={"Title"} data={planItem.get().title}/>
-        <PlanEdit title={"Description"} data={planItem.get().description}/>
-        <PlanEdit title={"Deadline"} data={planItem.get().deadline}/>
-        <PlanEdit title={"Created Date: "} data={planItem.get().created_date}/>
-        <PlanEdit title={"Last saved: "} data={planItem.get().updated_date}/>
+        <PlanEdit data={"Title"} title={planItem.get().title}/>
+        <PlanEdit data={"Description"} title={planItem.get().description}/>
+        <PlanEdit data={"Deadline"} title={planItem.get().deadline}/>
+        <PlanEdit data={"Created Date: "} title={planItem.get().created_date}/>
+        <PlanEdit data={"Last saved: "} title={planItem.get().updated_date}/>
     </box>
   )
 }

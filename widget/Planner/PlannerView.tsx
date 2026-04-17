@@ -40,12 +40,12 @@ export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
                 spacing={8}
                 css="padding: 10px;"
               >
-                <label label={"Status: " + data.title} />
-                <label label={"Description: " + data.description} />
-                <label label="Status: Done/Not done/Something" />
-                <label label="Created date: DATE" />
-                <label label="Deadline: DATE" />
-                <label label="Click to edit" />
+                <label label={"Status: " + data.title} halign={Gtk.Align.START}/>
+                <label label={"Description: " + data.description} halign={Gtk.Align.START}/>
+                <label label="Status: Done/Not done/Something" halign={Gtk.Align.START}/>
+                <label label="Created date: DATE" halign={Gtk.Align.START}/>
+                <label label="Deadline: DATE" halign={Gtk.Align.START}/>
+                <label label="Click to edit" halign={Gtk.Align.START}/>
               </box>
             ) as Gtk.Widget
 
@@ -58,10 +58,11 @@ export const PlannerViewer = ({ plans }: PlannerViewerProps) => {
           propagationPhase={Gtk.PropagationPhase.CAPTURE}
           button={Gdk.BUTTON_SECONDARY}
           onPressed={() => {
-            if (currentlyDraggedWidget === item) return
-            print("clicked with primary button")
+            if (currentlyDraggedWidget === item) {
+              setEditItem(null)
+              return
+            }
             setEditItem(data)
-            print("Editing item: ", editItem.get()?.title)
           }}
         />
         <ScrollingLabel text={data.title} maxChars={25} displayChars={30} />

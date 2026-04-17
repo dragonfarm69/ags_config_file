@@ -620,3 +620,11 @@ progressbar.countDown-progress trough progress {
   padding: 10px;
   border-radius: 6px;
 }
+
+.plan-edit-content {
+  color: $text-tertiary;
+  background-color: $bg-dark-alpha;
+  padding: 16px;
+  font-size: 14px;
+  font-family: monospace;
+}
